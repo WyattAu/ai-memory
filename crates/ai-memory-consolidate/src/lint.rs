@@ -24,7 +24,7 @@ use ai_memory_llm::{
     ChatMessage, ChatRequest, LlmOperationId, LlmProvider, LlmWorkload, Role,
     complete_structured_with_operation_id,
 };
-use ai_memory_store::{DecayCandidate, ReaderPool};
+use ai_memory_store::{DecayCandidate, LintRulePage, ReaderPool};
 use ai_memory_wiki::{AdmissionContext, AdmissionOp, Wiki, WritePageRequest};
 use jiff::Timestamp;
 use jiff::tz::TimeZone;
@@ -127,6 +127,167 @@ pub fn stale_days_for(lambda: f64) -> f64 {
         // every comparison false).
         STALE_DAYS
     }
+}
+
+/// Default threshold for the `review_bulk` check (#1471): a minute
+/// bucket with this many governed-page updates is a bulk review bump.
+/// The field deployment that motivated the rule saw 62 rules bumped in
+/// one minute; legitimate per-rule edits never cluster this tight.
+pub const REVIEW_BULK_DEFAULT_THRESHOLD: usize = 10;
+
+/// Microseconds in one minute — the bucket size for [`review_bulk_findings`].
+const MINUTE_US: i64 = 60_000_000;
+
+/// `review_bulk` (#1471): warn when `threshold` or more governed pages
+/// (`_rules/`, `procedures/`) were all updated within the same minute.
+/// The failure mode is a bulk review bump — an operator (or script)
+/// touching every rule at once so the dates look governed, with no
+/// per-page review actually happening. One finding per hot minute
+/// bucket, listing the pages.
+#[must_use]
+pub fn review_bulk_findings(pages: &[LintRulePage], threshold: usize) -> Vec<LintFinding> {
+    use std::collections::BTreeMap;
+    let mut buckets: BTreeMap<i64, Vec<&LintRulePage>> = BTreeMap::new();
+    for page in pages {
+        buckets
+            .entry(page.updated_at_us.div_euclid(MINUTE_US))
+            .or_default()
+            .push(page);
+    }
+    let mut out = Vec::new();
+    for (_minute, group) in buckets {
+        if group.len() < threshold {
+            continue;
+        }
+        let mut paths: Vec<String> = group.iter().map(|p| p.path.clone()).collect();
+        paths.sort();
+        let shown: Vec<String> = paths.iter().take(5).cloned().collect();
+        let more = if paths.len() > 5 {
+            format!(" (+{} more)", paths.len() - 5)
+        } else {
+            String::new()
+        };
+        out.push(LintFinding {
+            kind: "review_bulk".into(),
+            severity: "warning".into(),
+            message: format!(
+                "{} governed pages were all updated in the same minute \
+                 ({}){} — a bulk review bump. If these were genuinely \
+                 re-reviewed one by one, ignore; otherwise the dates are \
+                 decorative and the rules were not re-reviewed.",
+                paths.len(),
+                shown.join(", "),
+                more,
+            ),
+            pages: paths,
+            detail: None,
+        });
+    }
+    out
+}
+
+/// Rule-page scope derived from the path: `_rules/deploy.md` is
+/// `global`; `_rules/teams/alpha/deploy.md` is scoped to the first
+/// path segment after the prefix. The store has no scope column — the
+/// path layout is the scope.
+#[must_use]
+fn rule_scope(path: &str) -> &str {
+    let rest = path.strip_prefix("_rules/").unwrap_or(path);
+    match rest.split_once('/') {
+        Some((scope, _)) => scope,
+        None => "global",
+    }
+}
+
+/// `implicit_supersede` (#1471): error when two or more live rule
+/// pages share the same frontmatter `key` and the same scope with no
+/// `supersedes` link between any of them — two live versions of one
+/// rule coexisting. The same key across *different* scopes is
+/// expected structure and only reported as info. Pages without a
+/// frontmatter `key` are skipped: the path is not a business key.
+#[must_use]
+pub fn implicit_supersede_findings(pages: &[LintRulePage]) -> Vec<LintFinding> {
+    use std::collections::BTreeMap;
+    let mut groups: BTreeMap<(String, String), Vec<&LintRulePage>> = BTreeMap::new();
+    for page in pages {
+        if !page.path.starts_with("_rules/") {
+            continue;
+        }
+        let Ok(fm) = serde_json::from_str::<serde_json::Value>(&page.frontmatter_json) else {
+            continue;
+        };
+        let Some(key) = fm.get("key").and_then(serde_json::Value::as_str) else {
+            continue;
+        };
+        if key.trim().is_empty() {
+            continue;
+        }
+        groups
+            .entry((key.to_owned(), rule_scope(&page.path).to_owned()))
+            .or_default()
+            .push(page);
+    }
+
+    let mut out = Vec::new();
+    let ids: std::collections::HashSet<i64> = pages.iter().map(|p| p.id).collect();
+    let mut multi_scope: BTreeMap<String, Vec<String>> = BTreeMap::new();
+    for ((key, scope), group) in groups {
+        multi_scope
+            .entry(key.clone())
+            .or_default()
+            .push(scope.clone());
+        if group.len() <= 1 {
+            continue;
+        }
+        let linked = group
+            .iter()
+            .any(|p| p.supersedes.is_some_and(|t| ids.contains(&t)));
+        let mut paths: Vec<String> = group.iter().map(|p| p.path.clone()).collect();
+        paths.sort();
+        if linked {
+            // A declared chain inside the group: the supersession is
+            // explicit, which is all this check asks for. (A chain
+            // with gaps is the link_guard's territory.)
+            continue;
+        }
+        out.push(LintFinding {
+            kind: "implicit_supersede".into(),
+            severity: "error".into(),
+            message: format!(
+                "{} live `_rules/` entries share key `{key}` in scope \
+                 `{scope}` with no supersedes link between them: {}. \
+                 Store the replacement with an explicit supersedes target \
+                 so the old version leaves the live set.",
+                group.len(),
+                paths.join(", "),
+            ),
+            pages: paths,
+            detail: None,
+        });
+        multi_scope.entry(key).or_default().push(scope);
+    }
+    // Same key, multiple scopes: expected when rules are per-team, but
+    // worth one info line so a typo'd scope is visible.
+    for (key, mut scopes) in multi_scope {
+        scopes.sort();
+        scopes.dedup();
+        if scopes.len() > 1 {
+            out.push(LintFinding {
+                kind: "implicit_supersede".into(),
+                severity: "info".into(),
+                message: format!(
+                    "Key `{key}` appears in {} scopes ({}). If every \
+                     scope is intentional, ignore; a typo'd scope would \
+                     look exactly like this.",
+                    scopes.len(),
+                    scopes.join(", "),
+                ),
+                pages: Vec::new(),
+                detail: None,
+            });
+        }
+    }
+    out
 }
 
 /// Options for [`run_lint`].
@@ -268,6 +429,16 @@ pub async fn run_lint(
             detail: None,
         });
     }
+
+    // Governed-page checks (#1471): bulk review bumps and implicit
+    // supersession. Both read the same live `_rules/` + `procedures/`
+    // snapshot; one query, two pure functions over it.
+    let rule_pages = reader.lint_rule_pages(workspace_id, project_id).await?;
+    findings.extend(review_bulk_findings(
+        &rule_pages,
+        REVIEW_BULK_DEFAULT_THRESHOLD,
+    ));
+    findings.extend(implicit_supersede_findings(&rule_pages));
 
     // Explicit `stale` / `wrong` feedback (memory_feedback). An agent or
     // user asserting a page is outdated or incorrect is the highest-signal
@@ -1105,6 +1276,95 @@ mod tests {
             findings.iter().all(|f| f.kind != "rule_suggestion"),
             "non-rule page must not produce a rule_suggestion finding",
         );
+    }
+
+    /// #1471 review_bulk: ten governed pages bumped inside one minute
+    /// is a bulk review bump. Nine is a busy afternoon, not a bump.
+    /// Before this check existed, 62 of 88 rules were bumped in one
+    /// minute and nothing flagged it.
+    #[test]
+    fn review_bulk_fires_at_threshold_and_not_below() {
+        let base = 1_770_000_000_000_000i64; // any minute-aligned instant
+        let page = |n: usize, minute: i64| LintRulePage {
+            id: n as i64,
+            path: format!("_rules/generated/r{n}.md"),
+            frontmatter_json: r#"{"key": "gen-r{n}"}"#.into(),
+            updated_at_us: base + minute * MINUTE_US,
+            supersedes: None,
+        };
+        let nine: Vec<LintRulePage> = (0..9).map(|n| page(n, 0)).collect();
+        assert!(review_bulk_findings(&nine, 10).is_empty());
+
+        let ten: Vec<LintRulePage> = (0..10).map(|n| page(n, 0)).collect();
+        let findings = review_bulk_findings(&ten, 10);
+        assert_eq!(findings.len(), 1);
+        assert_eq!(findings[0].kind, "review_bulk");
+        assert_eq!(findings[0].severity, "warning");
+        assert_eq!(findings[0].pages.len(), 10);
+
+        // Ten pages spread across two minutes: no bucket reaches the
+        // threshold, so nothing fires — the check is per-minute, not
+        // per-window.
+        let spread: Vec<LintRulePage> = (0..10)
+            .map(|n| page(n, i64::try_from(n % 2).unwrap_or(0)))
+            .collect();
+        assert!(review_bulk_findings(&spread, 10).is_empty());
+    }
+
+    /// #1471 implicit_supersede: two live `_rules/` pages with the
+    /// same frontmatter key and scope and no supersedes link is the
+    /// error. A declared supersedes link between them is the fix. The
+    /// same key in a different scope is structure, reported as info.
+    #[test]
+    fn implicit_supersede_separates_error_from_info() {
+        let live = |id: i64, path: &str, key: &str, supersedes: Option<i64>| LintRulePage {
+            id,
+            path: path.into(),
+            frontmatter_json: format!(r#"{{"key": "{key}"}}"#),
+            updated_at_us: 1_770_000_000_000_000,
+            supersedes,
+        };
+
+        // Same key, same scope, no link: error.
+        let dupes = vec![
+            live(1, "_rules/deploy.md", "deploy", None),
+            live(2, "_rules/deploy-copy.md", "deploy", None),
+        ];
+        let findings = implicit_supersede_findings(&dupes);
+        assert_eq!(findings.len(), 1);
+        assert_eq!(findings[0].severity, "error");
+        assert_eq!(findings[0].kind, "implicit_supersede");
+
+        // Same key, same scope, explicit chain: silent.
+        let chained = vec![
+            live(1, "_rules/deploy.md", "deploy", None),
+            live(2, "_rules/deploy-v2.md", "deploy", Some(1)),
+        ];
+        assert!(implicit_supersede_findings(&chained).is_empty());
+
+        // Same key, different scopes: info only, never an error.
+        let scoped = vec![
+            live(1, "_rules/deploy.md", "deploy", None),
+            live(2, "_rules/teams/alpha/deploy.md", "deploy", None),
+        ];
+        let findings = implicit_supersede_findings(&scoped);
+        assert_eq!(findings.len(), 1);
+        assert_eq!(findings[0].severity, "info");
+
+        // No frontmatter key: skipped entirely (the path is not a
+        // business key).
+        let keyless = vec![
+            live(1, "_rules/one.md", "ignored-but-replaced-below", None),
+            live(2, "_rules/two.md", "ignored-but-replaced-below", None),
+        ];
+        let keyless: Vec<LintRulePage> = keyless
+            .into_iter()
+            .map(|mut p| {
+                p.frontmatter_json = "{}".into();
+                p
+            })
+            .collect();
+        assert!(implicit_supersede_findings(&keyless).is_empty());
     }
 
     #[test]

@@ -89,7 +89,7 @@ pub use reader::{
     CrossProjectEdge, DecayCandidate, DecayTombstone, DerivedIndexStatus, EmbeddingTripleCount,
     FTS_HIGHLIGHT_END, FTS_HIGHLIGHT_START, FeedbackFinding, GraphVia, HealthDetail, HealthPage,
     HybridSearch, HybridSearchOutcome, IdleOpenSession, InboxCount, InboxEntry, LinkGraph,
-    LinkGraphEdge, LinkGraphNode, ObservationHit, ObservationOrder, ObservationPage,
+    LinkGraphEdge, LinkGraphNode, LintRulePage, ObservationHit, ObservationOrder, ObservationPage,
     ObservationPageResult, ObservationProjectionTotals, ObservationRecord, OpenSession, PAGE_KINDS,
     PAGE_VERSIONS_MAX_LIMIT, PROJECT_LINK_GRAPH_MAX_NODES, PageAuthor, PageFilter, PageHit,
     PageHitWithMeta, PageLinks, PageLinksPreview, PageMeta, PageSummary, PageVersion,

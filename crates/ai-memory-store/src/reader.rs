@@ -2519,6 +2519,24 @@ pub struct ContradictionEdge {
     pub resolved: bool,
 }
 
+/// One live governed page (`_rules/` or `procedures/`) as the review
+/// lint checks see it: enough metadata to detect bulk review bumps
+/// (many pages bumped in the same minute) and implicit supersession
+/// (same frontmatter key and scope with no `supersedes` link).
+#[derive(Debug, Clone, Serialize)]
+pub struct LintRulePage {
+    /// Page id (the target a `supersedes` value points at).
+    pub id: i64,
+    /// Wiki path, e.g. `_rules/deploy.md`.
+    pub path: String,
+    /// The page's frontmatter JSON as stored (may be `{}`).
+    pub frontmatter_json: String,
+    /// Last update, unix microseconds.
+    pub updated_at_us: i64,
+    /// The page id this version supersedes, when declared.
+    pub supersedes: Option<i64>,
+}
+
 /// An unresolved cross-project link — a declared dependency on another
 /// project's page that does not resolve. Surfaced by `memory_lint`.
 #[derive(Debug, Clone, Serialize)]
@@ -10343,6 +10361,46 @@ impl ReaderPool {
                         from_path: row.get(0)?,
                         to_path: row.get(1)?,
                         resolved: resolved != 0,
+                    })
+                },
+            )?;
+            let mut out = Vec::new();
+            for r in rows {
+                out.push(r?);
+            }
+            Ok(out)
+        })
+        .await
+    }
+
+    /// Live governed pages (`_rules/` and `procedures/`) for the lint
+    /// review checks: bulk review bumps and implicit supersession
+    /// (#1471). Only `is_latest = 1` rows; non-expired like every
+    /// read-facing query.
+    pub async fn lint_rule_pages(
+        &self,
+        workspace_id: WorkspaceId,
+        project_id: ProjectId,
+    ) -> StoreResult<Vec<LintRulePage>> {
+        self.with_conn(move |conn| {
+            let mut stmt = conn.prepare(
+                "SELECT id, path, COALESCE(frontmatter_json, '{}'), updated_at, supersedes \
+                 FROM pages \
+                 WHERE workspace_id = ?1 AND project_id = ?2 AND is_latest = 1 \
+                   AND (path LIKE '_rules/%' OR path LIKE 'procedures/%') \
+                   AND (expires_at IS NULL OR expires_at > ?3) \
+                 ORDER BY path",
+            )?;
+            let now = now_us();
+            let rows = stmt.query_map(
+                params![workspace_id.as_bytes(), project_id.as_bytes(), now],
+                |row| {
+                    Ok(LintRulePage {
+                        id: row.get(0)?,
+                        path: row.get(1)?,
+                        frontmatter_json: row.get(2)?,
+                        updated_at_us: row.get(3)?,
+                        supersedes: row.get(4)?,
                     })
                 },
             )?;

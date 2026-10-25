@@ -13,6 +13,15 @@ version in [`docs/changelog/`](docs/changelog/):
 
 ### Added
 
+- `lint` gains two governed-page checks (#1471). `review_bulk` warns when
+  10 or more `_rules/` / `procedures/` pages were all updated within the same
+  minute — the bulk review bump pattern where dates are made to look governed
+  without any per-page review. `implicit_supersede` errors when two or more
+  live `_rules/` pages share a frontmatter `key` in the same scope with no
+  `supersedes` link between them (two live versions of one rule), and notes
+  the same key spanning multiple scopes as info. Backed by a new
+  `ReaderPool::lint_rule_pages` query over live governed pages.
+
 - `GET /admin/status` and `ai-memory status --json` now carry a
   `consolidation` block: the queue counts plus up to 20 `failed_sessions`
   (`session_id`, `attempts`, `failed_at_us`, scrubbed `last_error`), newest
