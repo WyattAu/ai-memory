@@ -133,10 +133,10 @@ If a migration removes files (moves them), copy or move them to
 operators recover accidentally-deleted data for at least one release cycle.
 
 ```rust
-// BAD — data is gone forever on upgrade.
+// BAD; data is gone forever on upgrade.
 std::fs::remove_dir_all(wiki_root.join("_tmp"))?;
 
-// GOOD — data lands in the graveyard, recoverable.
+// GOOD; data lands in the graveyard, recoverable.
 let graveyard = wiki_root.join("_graveyard").join(self.name());
 std::fs::create_dir_all(&graveyard)?;
 std::fs::rename(wiki_root.join("_tmp"), graveyard.join("_tmp"))?;

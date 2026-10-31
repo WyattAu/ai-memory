@@ -81,13 +81,13 @@ A project recorded `postgres` as its database, then migrated:
 
 ```jsonc
 // June: notes/db.md says "we use postgres"    (entity: postgres)
-// August: the page is superseded — "we migrated to sqlite" (entity: sqlite)
+// August: the page is superseded; "we migrated to sqlite" (entity: sqlite)
 
 memory_query { "query": "postgres" }
 // → no hits: current knowledge has moved on
 
 memory_query { "query": "postgres", "as_of": "2026-07-01T00:00:00Z" }
-// → the JUNE version of notes/db.md — the page that carried the
+// → the JUNE version of notes/db.md; the page that carried the
 //   `postgres` entity when July began, even though it has since been
 //   superseded
 ```

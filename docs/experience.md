@@ -15,7 +15,7 @@ capture → per-session summaries → durable knowledge distilled across
 trajectories. The pass targets pattern/procedure/preference/
 architecture pages, which make session #50 cheaper than session #5.
 
-## When to turn it on — and when not to
+## When to turn it on: and when not to
 
 Opt-in, off by default:
 
@@ -42,7 +42,7 @@ release binary before running the eval harness, the pass might stage:
 
 ## Proposed: procedures/eval-run.md
 
-Before benchmarking, rebuild the release server first — the harness
+Before benchmarking, rebuild the release server first; the harness
 spawns `target/release/ai-memory`, and a stale binary silently
 benchmarks old code.
 
@@ -50,7 +50,7 @@ benchmarks old code.
     cargo run --release -p ai-memory-eval -- retrieval
 
 Evidence: sessions 2026-08-28 ("rebuilt release, numbers changed"),
-2026-08-30 ("forgot the rebuild again — rerun").
+2026-08-30 ("forgot the rebuild again; rerun").
 ```
 
 It stays in `_pending/` (with `require_approval = true`) until a human

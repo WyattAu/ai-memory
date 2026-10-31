@@ -1,4 +1,4 @@
-# Retrieval A/B (R2) — accuracy + latency + context-tokens triple
+# Retrieval A/B (R2): accuracy + latency + context-tokens triple
 
 The `retrieval` harness can compare two server/query configurations over
 the **same** LongMemEval-S question set in one run, reporting a triple per

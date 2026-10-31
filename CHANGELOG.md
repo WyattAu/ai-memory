@@ -104,7 +104,7 @@ version in [`docs/changelog/`](docs/changelog/):
   v2 basename, now the project's `legacy_name`) no longer creates a second,
   empty project under that name. The read path already resolved the old name
   to the promoted project, so the twin made every later lookup of that name
-  fail as ambiguous until it was purged — and the next capture from the same
+  fail as ambiguous until it was purged; and the next capture from the same
   checkout created it again. The capture path now reuses the project the read
   path resolves, and refuses an already-ambiguous name instead of adding a
   third row (#1657).
@@ -123,7 +123,7 @@ version in [`docs/changelog/`](docs/changelog/):
   `rename-project`, are now refused before anything is sent. An empty flag
   passed the "was the target named" check and then resolved as if it had been
   omitted, so a script that passed an unset variable reached the project its
-  current directory resolved to — a real purge from an explicit-looking
+  current directory resolved to; a real purge from an explicit-looking
   invocation (#1642).
 - `ai-memory workstream-search` now labels a historical tool call or tool
   result as completed evidence, as the managed-workstream docs describe. Its
@@ -161,13 +161,13 @@ version in [`docs/changelog/`](docs/changelog/):
   message is unchanged (#1634).
 - A Qwen Code `UserPromptSubmit` body is now capped and scrubbed before the
   native hook spools it. The per-event cap covered `prompt`, `message` and
-  `text`, but Qwen's prompt arrives in `submitted_prompt` — the field the
-  harness-specific extraction reads — so a Qwen prompt reached the local spool
+  `text`, but Qwen's prompt arrives in `submitted_prompt`; the field the
+  harness-specific extraction reads; so a Qwen prompt reached the local spool
   and the server at full length with no client-side redaction pass. The field
   is now capped alongside its siblings; nothing falls back to the generic
   `prompt`, so submission provenance is unchanged (#1633).
 - The forget sweep now keeps an already-compacted page terminal when
-  `compact_cold_episodic` is off — the default everywhere. The guard that made
+  `compact_cold_episodic` is off; the default everywhere. The guard that made
   a page carrying the V65 `compacted_at` marker "neither re-compacted nor
   evicted" sat inside the compaction arm only, so with compaction off such a
   page was tombstoned and then hard-deleted. The marker is not A2's alone: the
@@ -328,7 +328,7 @@ version in [`docs/changelog/`](docs/changelog/):
 - The LLM dream pass no longer writes a cross-scope wikilink that does not
   resolve. Every other consolidation write runs its proposed bodies through the
   cross-scope link guard, but the dream pass never did, so a `[[project:path]]`
-  carried in from a cluster member's body — or invented by the model — reached
+  carried in from a cluster member's body; or invented by the model; reached
   the merged survivor and minted a dangling cross-project edge that the lint
   pass reported on every later run and nothing could clear.
   ([#1566](https://github.com/akitaonrails/ai-memory/pull/1566))
@@ -340,9 +340,9 @@ version in [`docs/changelog/`](docs/changelog/):
   are now read at the same time.
   ([#1567](https://github.com/akitaonrails/ai-memory/pull/1567))
 - The importer no longer carries a UTF-8 BOM into an imported text or Markdown
-  document. `document --file notes.md` on a file saved with a BOM — what
+  document. `document --file notes.md` on a file saved with a BOM; what
   Notepad, VS Code's `utf8bom` encoding and Excel's "CSV UTF-8" export all
-  write — stored a body beginning `\u{feff}# Overview`, so the first heading
+  write; stored a body beginning `\u{feff}# Overview`, so the first heading
   stopped being a heading. Nothing downstream removed it, since U+FEFF is
   neither whitespace nor a control character, and the transcript extractor in
   the same file already stripped it.
@@ -382,8 +382,8 @@ version in [`docs/changelog/`](docs/changelog/):
 - `purge-project` now keeps `--force` and `--compact` in the re-run command its
   refusal prints. The dry-run preview above it is computed with the operator's
   own flags, but the printed command dropped them, so pasting it after a
-  `--force` run came back as a 409 `managed run lease is active` — the exact
-  condition `--force` overrides — and a `--compact` run quietly reverted to a
+  `--force` run came back as a 409 `managed run lease is active`; the exact
+  condition `--force` overrides; and a `--compact` run quietly reverted to a
   logical delete ([#1574](https://github.com/akitaonrails/ai-memory/pull/1574))
 - `move-project` now keeps `--force` and `--on-conflict` in the re-run command
   its refusal prints. Both flags are honoured in the request the command
@@ -405,8 +405,8 @@ version in [`docs/changelog/`](docs/changelog/):
   only the deterministic structured-response shapes, so a rejected or expired
   credential, an unconfigured provider, a schema failure and a
   malformed-request `4xx` were all retried: one expired API key burned the
-  full five-attempt cap — five complete consolidation prompts over 7.5
-  minutes — for every ended session, logging "queued for retry" four times.
+  full five-attempt cap; five complete consolidation prompts over 7.5
+  minutes; for every ended session, logging "queued for retry" four times.
   The check now defers to `LlmError::is_transient`, the predicate the
   in-process consolidation and bootstrap retry loops already use, so only a
   `429`, a `5xx` or a transport timeout/connect failure keeps the bounded
@@ -440,7 +440,7 @@ version in [`docs/changelog/`](docs/changelog/):
   The printed snippet hand-interpolated `[mcp_servers.<name>]`, so `--name
   ai.memory` printed a header a TOML reader resolves as three nested tables
   rather than one server, and `--name "my memory"` printed an invalid header
-  that breaks the whole `config.toml` it is pasted into — while `--apply`
+  that breaks the whole `config.toml` it is pasted into; while `--apply`
   quoted the key correctly all along. The printed table is now built with the
   apply path's own `toml_edit` writer; output for an ordinary name is
   unchanged.
@@ -481,7 +481,7 @@ version in [`docs/changelog/`](docs/changelog/):
 - Fixed restoring a page from a checkpoint leaving a pre-OKF file on disk.
   `restore-page` wrote the checkpointed bytes verbatim while the three
   sibling write paths conform theirs, and the row it indexes is conformed at
-  the store's write choke point either way — so only the file was left
+  the store's write choke point either way; so only the file was left
   behind. Restoring the pre-OKF checkpoint every migrated install carries
   then broke `export-okf` for the whole project with "run the server once to
   migrate", which the one-shot wiki migration never does again, and made
@@ -516,7 +516,7 @@ version in [`docs/changelog/`](docs/changelog/):
   ([#1531](https://github.com/akitaonrails/ai-memory/pull/1531))
 - `ai-memory run` now refuses an `--env`/`--env-file` entry whose key carries
   whitespace. `--env-file` lines are trimmed as a whole, not per half, so the
-  common dotenv spelling `KEY = value` produced a key with a trailing space —
+  common dotenv spelling `KEY = value` produced a key with a trailing space -
   an entry no shell or harness can read, so the override silently did nothing.
   ([#1532](https://github.com/akitaonrails/ai-memory/pull/1532))
 - Discovered a repository page whose `--include` family names a bare top-level
@@ -525,7 +525,7 @@ version in [`docs/changelog/`](docs/changelog/):
   ([#1533](https://github.com/akitaonrails/ai-memory/pull/1533))
 - A Copilot `/responses` answer stopped by `max_output_tokens` is now reported
   as a truncated response naming the model and its output-token count, instead
-  of an unexpected response shape reading "no error detail" — `error` is null
+  of an unexpected response shape reading "no error detail"; `error` is null
   on an incomplete answer, so nothing explained the stop and the class implied
   an unparseable reply rather than a `max_tokens` to raise.
   ([#1534](https://github.com/akitaonrails/ai-memory/pull/1534))
@@ -563,7 +563,7 @@ version in [`docs/changelog/`](docs/changelog/):
 - `install.ps1` now refuses a plain-http GitHub release base. The scheme check
   sat inside a condition whose arms already implied https, so it could never
   fire, and an `http://github.com/...` base matched neither arm and skipped it
-  entirely — while the archive and its checksum are fetched from that same
+  entirely; while the archive and its checksum are fetched from that same
   origin, so the checksum proved nothing against an on-path rewrite.
   ([#1541](https://github.com/akitaonrails/ai-memory/pull/1541))
 - An unspaced-CJK search carrying `AND`, `NOT` or `NEAR` no longer returns the
@@ -618,7 +618,7 @@ version in [`docs/changelog/`](docs/changelog/):
   budget ran out was returned as a complete answer: a consolidation or bootstrap
   chunk could write a fraction of its pages and report success. On models that
   reject a forced `tool_choice` the same stop reported "no tool_use block"
-  instead. Non-structured completions are unchanged — prose cut at the budget is
+  instead. Non-structured completions are unchanged; prose cut at the budget is
   still returned.
   ([#1549](https://github.com/akitaonrails/ai-memory/pull/1549))
 - Counted a page needing only an L0 abstract embedding in `ai-memory embed
@@ -644,7 +644,7 @@ version in [`docs/changelog/`](docs/changelog/):
   `workspace/project:` scope holds a character the link reader cannot parse,
   such as a space in `my project:notes/x`. The write boundary used a looser
   character class than the reader, so the colon stayed inside the page path on
-  read and the write created an edge to a path no page write can ever produce —
+  read and the write created an edge to a path no page write can ever produce -
   a `links` row that could never be resolved.
   ([#1553](https://github.com/akitaonrails/ai-memory/pull/1553))
 
@@ -674,7 +674,7 @@ version in [`docs/changelog/`](docs/changelog/):
 - The OKF migration now conforms a page nested under a project bundle whose
   file is named `index.md`. Only the bundle root's own `index.md` is reserved,
   but the skip matched on the basename at any depth, so the database row was
-  conformed while its file kept pre-OKF frontmatter — and markdown being the
+  conformed while its file kept pre-OKF frontmatter; and markdown being the
   source of truth, the next reindex de-conformed the page again.
   ([#1557](https://github.com/akitaonrails/ai-memory/pull/1557))
 - A root Grok session no longer loses its handoff because a tool used one of

@@ -56,11 +56,11 @@ Every HTTP request is resolved to one of four authentication tiers:
 
 | Rung | Trigger | What the request gets |
 |---|---|---|
-| **0 — Anonymous** | No root bearer configured (`AI_MEMORY_AUTH_TOKEN`, `[auth].bearer_token` or `[auth].bearer_token_file`). | Allowed, no identity. Same as pre-multi-user defaults. A fresh `ai-memory init` skips this rung by minting a root bearer; an older install stays here until `ai-memory auth enable`. |
-| **1 — Root** | Bearer matches the root bearer (`AI_MEMORY_AUTH_TOKEN`, `[auth].bearer_token`, or the token in `[auth].bearer_token_file`). | Allowed as **root**. When `[auth].root_username` is set, writes attribute to that name; otherwise attribution stays anonymous. |
-| **1b — Proxy-asserted user** | Bearer matches the distinct `[auth].actor_proxy_bearer_token`. | Identity is taken from trusted `X-Memory-Actor-*` headers. The request is a **user** unless its OIDC issuer/subject pair exactly matches the configured root pair. Missing or malformed identity is rejected. |
-| **2 — DB user** | Bearer doesn't match root, matches an active `api_credentials.token_hash` (SHA-256 of the secret + `[auth].token_pepper`). Native keys use the `aim_` prefix. | Allowed as **that user** for normal read/write APIs. Native keys always resolve as `AuthLevel::User`, even when the owning identity is `role=root`. All `/admin/*` endpoints are root-only in multi-user mode. The audit log records the username/email/name. |
-| **3 — 401** | Bearer present but matches nothing. | Rejected. This closes the bypass: unknown bearers can't slip through as anonymous. |
+| **0; Anonymous** | No root bearer configured (`AI_MEMORY_AUTH_TOKEN`, `[auth].bearer_token` or `[auth].bearer_token_file`). | Allowed, no identity. Same as pre-multi-user defaults. A fresh `ai-memory init` skips this rung by minting a root bearer; an older install stays here until `ai-memory auth enable`. |
+| **1; Root** | Bearer matches the root bearer (`AI_MEMORY_AUTH_TOKEN`, `[auth].bearer_token`, or the token in `[auth].bearer_token_file`). | Allowed as **root**. When `[auth].root_username` is set, writes attribute to that name; otherwise attribution stays anonymous. |
+| **1b; Proxy-asserted user** | Bearer matches the distinct `[auth].actor_proxy_bearer_token`. | Identity is taken from trusted `X-Memory-Actor-*` headers. The request is a **user** unless its OIDC issuer/subject pair exactly matches the configured root pair. Missing or malformed identity is rejected. |
+| **2; DB user** | Bearer doesn't match root, matches an active `api_credentials.token_hash` (SHA-256 of the secret + `[auth].token_pepper`). Native keys use the `aim_` prefix. | Allowed as **that user** for normal read/write APIs. Native keys always resolve as `AuthLevel::User`, even when the owning identity is `role=root`. All `/admin/*` endpoints are root-only in multi-user mode. The audit log records the username/email/name. |
+| **3; 401** | Bearer present but matches nothing. | Rejected. This closes the bypass: unknown bearers can't slip through as anonymous. |
 
 The rungs are sticky: a request is matched at the first credential that
 applies, never escalates. Startup rejects equal root and proxy credentials;
@@ -447,7 +447,7 @@ $ AI_MEMORY_AUTH_TOKEN=<root-token> \
   email: alice@home
   role:  user
 
-Store this temporary password now — it will NOT be shown again.
+Store this temporary password now; it will NOT be shown again.
 The user must change it on next login.
 
 xK7mPq...<temp password>
@@ -498,7 +498,7 @@ Machine clients use `aim_` credentials, not passwords:
 $ ai-memory api-key add --username alice --label codex-laptop
 ✓ created API key '…' (codex-laptop)
 
-Store this token now — it will NOT be shown again.
+Store this token now; it will NOT be shown again.
 
 aim_mYi3pq...<secret>
 ```

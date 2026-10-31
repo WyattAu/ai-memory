@@ -563,7 +563,7 @@ $Dest = "$env:LOCALAPPDATA\ai-memory"
 # Download the WinSW release matching your runtime (.NET Framework 4.6.1+
 # or the self-contained .NET build) from https://github.com/winsw/winsw/releases
 # Pin a specific release tag rather than "latest", and keep a note of which
-# one you installed — it is a third-party binary running as a service.
+# one you installed: it is a third-party binary running as a service.
 Move-Item .\WinSW-x64.exe "$Dest\ai-memory-service.exe"
 ```
 

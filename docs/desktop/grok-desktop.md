@@ -13,7 +13,7 @@ wrapper, not a native app, so there is nothing to integrate beyond grok.com's
 own web features. Remote MCP support on grok.com is **unverified**: xAI docs
 were not fetched, so do not assume it.
 
-## 2. Grok Bot — Cursor's desktop agent (native, closed)
+## 2. Grok Bot: Cursor's desktop agent (native, closed)
 
 `/usr/share/applications/grok-bot.desktop` → `/usr/bin/grok-bot`, pacman
 package `grok-bot-bin 0.66.0-1` (AUR; local install). Verified facts:

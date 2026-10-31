@@ -63,7 +63,7 @@ The sections below walk through each.
 
 ---
 
-## Path 1 — Caddy + public domain + Let's Encrypt
+## Path 1: Caddy + public domain + Let's Encrypt
 
 Cleanest path when you have a domain and port 80/443 reachable. Caddy
 auto-issues + auto-renews from Let's Encrypt with no operator
@@ -81,7 +81,7 @@ services:
     container_name: ai-memory
     restart: unless-stopped
     expose:
-      - "49374"          # internal only — Caddy reaches it over the docker network
+      - "49374"          # internal only; Caddy reaches it over the docker network
     volumes:
       - ai-memory-data:/data
     env_file:
@@ -181,7 +181,7 @@ root mount, and the startup log says why. The trailing-slash redirect
 at `{base_path}{web_slug}/` keeps the query string on its way to the
 canonical form.
 
-### MCP client config (Claude Code shown — others follow the same shape)
+### MCP client config (Claude Code shown: others follow the same shape)
 
 ```bash
 ai-memory install-mcp   --client claude-code --apply \
@@ -202,7 +202,7 @@ Let's Encrypt is in every system trust store.
 
 ---
 
-## Path 2 — Caddy with internal CA (LAN-only)
+## Path 2: Caddy with internal CA (LAN-only)
 
 You don't have a public domain or you don't want to expose anything
 to the internet. Caddy's internal CA generates a per-server root cert
@@ -259,7 +259,7 @@ public domain. Everything else is identical.
 
 ---
 
-## Path 3 — Cloudflare Tunnel
+## Path 3: Cloudflare Tunnel
 
 Cloudflare's `cloudflared` daemon establishes an outbound-only tunnel
 to Cloudflare's edge. **No ports open on your router**, no public IP
@@ -287,7 +287,7 @@ services:
     container_name: ai-memory
     restart: unless-stopped
     expose:
-      - "49374"          # tunnel reaches it over the docker network — no host port
+      - "49374"          # tunnel reaches it over the docker network; no host port
     volumes:
       - ai-memory-data:/data
     env_file:
@@ -337,7 +337,7 @@ ai-memory install-mcp   --client claude-code --apply \
 
 ---
 
-## Path 4 — External cert files (Caddy or nginx)
+## Path 4: External cert files (Caddy or nginx)
 
 You already have a CA issuing certs to your services (corporate PKI,
 homelab Vault, anything). You don't want Caddy issuing its own.
@@ -507,7 +507,7 @@ because your host already trusts that root; the container does not.
 3. Mount it and point the container at it. Either option works:
 
    ```yaml
-   # docker-compose.yml — option A: SSL_CERT_FILE
+   # docker-compose.yml: option A: SSL_CERT_FILE
    services:
      ai-memory:
        volumes:

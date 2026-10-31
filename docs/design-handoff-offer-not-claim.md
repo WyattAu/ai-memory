@@ -87,8 +87,8 @@ has no opt-out, and `to_agent` is stored but never used to target delivery.
   session-start context as the handoff, additive and non-destructive:
   `memory_message_pop` is what actually consumes a message, and the notice only
   says a count is waiting. Its own doc comment is explicit about why:
-  **"this carries ONLY a static integer count — never any message-controlled
-  text (no subject, no sender string) — so a hostile message cannot inject
+  **"this carries ONLY a static integer count; never any message-controlled
+  text (no subject, no sender string); so a hostile message cannot inject
   text into the on-start context."** This is the precedent the maintainer
   pointed at ("inject a non-consuming notice... like the existing inbox
   notice"), and it comes with a security constraint this proposal has to

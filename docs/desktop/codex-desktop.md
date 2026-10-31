@@ -32,7 +32,7 @@ repo contains `codex-rs/app-server`, `app-server-protocol`,
 protocol; <https://developers.openai.com/siwc/token-sharing-open-source/codex-app-server>
 documents running your own app-server against the ChatGPT plan.
 
-## MCP client support — shared config with the CLI
+## MCP client support: shared config with the CLI
 
 "The ChatGPT desktop app, Codex CLI, and IDE extension support MCP servers
 and **share MCP configuration for the same Codex host**"
@@ -54,7 +54,7 @@ and **share MCP configuration for the same Codex host**"
   512 chars self-contained). This matters for how ai-memory's tool-routing
   guidance is surfaced in Codex.
 
-## Lifecycle hooks — full Claude-Code-style model, in core
+## Lifecycle hooks: full Claude-Code-style model, in core
 
 Codex has a native lifecycle-hooks framework
 (<https://developers.openai.com/codex/hooks>), confirmed in source

@@ -1,4 +1,4 @@
-# ECC — Research Report
+# ECC: Research Report
 
 *Repo:* <https://github.com/affaan-m/ECC> · MIT · primarily JavaScript/TypeScript
 (with Python, Go, Shell). *Snapshot:* 2026-09-03: ~247k stars, ~37k forks,
@@ -115,12 +115,12 @@ merge/conflict story and no live cross-session handoff; ai-memory's is richer
 (real-time handoff, attribution, one store many machines) at the cost of
 running a server. Which one fits depends on the team.
 
-## 7. What's Good / What's Missing — Honest Take
+## 7. What's Good / What's Missing: Honest Take
 
 **What ECC does better (or at least differently, worth stealing):**
 - The **memory-vs-governed-knowledge distinction** as a first-class
   principle. ai-memory already hints at this (the lint pass suggests
-  "this looks like a durable rule — copy it into CLAUDE.md/AGENTS.md"), but
+  "this looks like a durable rule; copy it into CLAUDE.md/AGENTS.md"), but
   ECC makes *promotion* an explicit, designed path. ai-memory could formalize
   a **promotion flow**: memory page → reviewed → emitted as a governed
   `AGENTS.md`/rule the agent loads every turn, closing the loop the lint only

@@ -375,10 +375,10 @@ trap - EXIT
 
 # 2. Start the server. `--restart unless-stopped` makes it come back
 #    on docker daemon restart and on machine boot (provided your
-#    docker service is enabled at boot — `sudo systemctl enable
+#    docker service is enabled at boot: `sudo systemctl enable
 #    docker` on most distros). Loopback-only bind (`127.0.0.1:49374`)
 #    so nothing outside this machine can reach it. Omit the LLM /
-#    EMBEDDING lines for zero-LLM mode — FTS5 search still works
+#    EMBEDDING lines for zero-LLM mode: FTS5 search still works
 #    without any keys.
 docker run -d --name ai-memory \
     --restart unless-stopped \
@@ -548,7 +548,7 @@ Homebrew, but not by the pinned Nixpkgs revision.
         {
           services.ai-memory = {
             enable = true;
-            # enableWeb = true;  # off by default — the web UI is opt-in
+            # enableWeb = true;  # off by default: the web UI is opt-in
             # enableApi = true;  # API-only companions; no browser UI
             settings = {
               allowed_hosts = [ "localhost" "127.0.0.1" "::1" "homelab.example" ];

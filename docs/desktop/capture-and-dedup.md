@@ -1,4 +1,4 @@
-# Capture & dedup without lifecycle hooks — and what actually has hooks (research)
+# Capture & dedup without lifecycle hooks: and what actually has hooks (research)
 
 > Research for RFC #878. Findings that drive the design; see per-app files
 > for sources. Rule from RFC #878 that still holds: everything entering the
@@ -35,7 +35,7 @@ output. Practical consequences:
   idea): on apps without any hook surface this is the only in-band path,
   and its quality is bounded by the model's willingness to summarize.
 
-### Local-store watchers (option c) — status
+### Local-store watchers (option c): status
 
 Now concrete per app (paths verified locally unless noted):
 

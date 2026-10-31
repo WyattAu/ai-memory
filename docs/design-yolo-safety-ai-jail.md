@@ -232,7 +232,7 @@ collision.
 | `docker-config` (`~/.docker/config.json`) | credential | when present | on when present |
 | `ssh` (`~/.ssh` read-only + `SSH_AUTH_SOCK`) | credential | when `~/.ssh` exists or an agent socket is set | on only when `git push` to `origin` goes over SSH (`git@host:…`, an `~/.ssh/config` alias `host:…`, `ssh://…`), read from the push URL so an HTTPS fetch URL with an SSH `pushurl`/`pushInsteadOf` still counts |
 | `worktree` | capability | only in a linked git worktree | on there |
-| `docker` (socket — ⚠ grants host root) | capability | always | off |
+| `docker` (socket; ⚠ grants host root) | capability | always | off |
 | `gpu`, `display` | capability | Linux only | off |
 | `pictures`, `tailscale` | capability | always | off |
 | `audio`, `x11`, `host-shm`, `terminal-passthrough`, `update-check`, `mise`, `toolchains` | capability | never (`--jail=` only) | not passed |

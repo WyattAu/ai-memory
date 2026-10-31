@@ -28,7 +28,7 @@ The `[auto_scope]` config block still selects the mode explicitly, including
 
 | `mode`        | Key                    | When to use                                                                                              |
 |---------------|------------------------|----------------------------------------------------------------------------------------------------------|
-| `single`      | (none — global slot)   | The pre-v1.39 behaviour. One operator, one harness at a time; last write wins. Opt in only if you want it. |
+| `single`      | (none; global slot)   | The pre-v1.39 behaviour. One operator, one harness at a time; last write wins. Opt in only if you want it. |
 | `per_session` | `session_id`           | Session-aware clients/bridges that forward the hook session id on every MCP request. |
 | `per_actor`   | `(qualified identity, session_id)`, with an identity-only no-session slot | **Default.** Isolates parallel harnesses and separate operators. Falls back to the shared slot for a caller with no coordinate, and for an install where nothing has ever been keyed (no lifecycle hooks); fails closed on a genuine session mismatch. |
 

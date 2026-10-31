@@ -154,9 +154,9 @@ the runs above.
 | **Antigravity** | Yes, root `hooks.json`, documented for the CLI only; no SessionEnd or prompt event | Yes, `mcp_config.json` (`serverUrl`, not `url`) | Yes | Not documented | "automatically updated" (2.0) | `agy plugin install <name>@antigravity-plugins-official`, GitHub URL, local dir | Not documented; no plugin-root variable documented |
 | **Copilot CLI** | Yes | Yes | Yes | Not documented | `copilot plugin update` | marketplace repos; also reads `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` as fallbacks | Not documented |
 | **Factory Droid** | Yes, Claude-style `hooks/hooks.json`, `${DROID_PLUGIN_ROOT}` or `${CLAUDE_PLUGIN_ROOT}` | Yes, `mcp.json` (no secrets) | Yes | Not documented | `droid plugin marketplace update` | Reads `.factory-plugin/marketplace.json`, falls back to `.claude-plugin/marketplace.json` | Not documented |
-| **OpenCode** | Code-level plugins (JS/TS events), not a hooks file | From config, not the plugin | — | Config | npm via Bun at startup | npm or local | None. ai-memory already generates this plugin (`install-hooks --agent opencode`) |
-| **Kimi Code** | No (plugins are tool bundles) | No | — | `config_file`/`inject` | Reinstall | Local, zip, git | None |
-| **Zed** | No | MCP extensions, "We plan to deprecate MCP server extensions in favor of the official MCP registry" | — | — | Registry | Extension registry | Registry PR |
+| **OpenCode** | Code-level plugins (JS/TS events), not a hooks file | From config, not the plugin | - | Config | npm via Bun at startup | npm or local | None. ai-memory already generates this plugin (`install-hooks --agent opencode`) |
+| **Kimi Code** | No (plugins are tool bundles) | No | - | `config_file`/`inject` | Reinstall | Local, zip, git | None |
+| **Zed** | No | MCP extensions, "We plan to deprecate MCP server extensions in favor of the official MCP registry" | - |; | Registry | Extension registry | Registry PR |
 
 Corrections to the table in RFC #1166:
 
@@ -327,7 +327,7 @@ install.
 | Server URL | `userConfig.server_url` (string) | empty (shipped; proposed `http://127.0.0.1:49374`) | Read by the launcher from `CLAUDE_PLUGIN_OPTION_SERVER_URL`; MCP gets `${user_config.server_url}`. Empty means the `server_url` of the ai-memory config, for hooks and MCP alike |
 | Binary path | `userConfig.ai_memory_bin` (string) | `ai-memory` | For installs off `PATH` |
 | Data dir | `userConfig.data_dir` (string) | empty | Only for a non-default data dir |
-| Token | **none in the plugin** | — | Hooks read `<data_dir>/auth-token`, the OIDC `auth.json` or a server profile; `mcp-bridge` uses configured auth, then the same stored hook key, then loopback-only discovered root auth. The discovered root key never leaves loopback. Same files `setup`, `install-hooks --auth-token` and `auth login` already write |
+| Token | **none in the plugin** | - | Hooks read `<data_dir>/auth-token`, the OIDC `auth.json` or a server profile; `mcp-bridge` uses configured auth, then the same stored hook key, then loopback-only discovered root auth. The discovered root key never leaves loopback. Same files `setup`, `install-hooks --auth-token` and `auth login` already write |
 | Project override, capture mode, `ignore_paths`, briefing, server routing | `.ai-memory.toml` marker, persisted capture mode, `servers.toml` profiles | as today | The native hook already enforces all of these. Nothing is duplicated into plugin settings |
 
 Keeping the token out of the plugin keeps one credential store for hooks, MCP
@@ -856,7 +856,7 @@ Estimates are engineer-days for one person familiar with the codebase.
 | **2. CI and release automation** | `plugins.yml` (validate, launcher, sandboxed e2e, Codex smoke); `bin/release` stamping; `validate-version` extension; release zip asset | 1.5-2 |
 | **3. Codex plugin** | `plugins/codex`, `.agents/plugins/marketplace.json`, `commandWindows`, trust guidance in docs, `doctor` plugin-hook trust check | 2 |
 | **4. Cursor plugin** (3.0 stretch, else 3.1) | Depends on the phase 0 answers; #721 detection of the Cursor plugin; branch strategy for the Cursor import | 2-3 |
-| **Later** | Cowork capture if phase 0 shows hooks run in the VM; Antigravity; Gemini; Copilot CLI and Droid catalogs; a directory submission | — |
+| **Later** | Cowork capture if phase 0 shows hooks run in the VM; Antigravity; Gemini; Copilot CLI and Droid catalogs; a directory submission | - |
 
 Phases 1 to 3 come to roughly 9 to 10.5 days. This is additive work, so it targets
 `release/3.0`, not `main`.

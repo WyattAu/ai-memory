@@ -259,8 +259,8 @@ ships something ai-memory does not, it is named.
   routines, signals, sentinels), mesh sync (the nearest equivalent is the
   git-based `ai-memory-wikisync` companion), image memory, the two-way Claude
   `MEMORY.md` bridge, PaaS deploy templates, an npm package (ai-memory installs
-  natively on Linux, macOS and Windows in two commands — `install.sh`/
-  `install.ps1` then `ai-memory setup` — but has no `npx` route), and the
+  natively on Linux, macOS and Windows in two commands; `install.sh`/
+  `install.ps1` then `ai-memory setup`; but has no `npx` route), and the
   opt-in local cross-encoder reranker. The benchmark numbers are not
   like-for-like (component vs pipeline, see above). To move your data, the
   `ai-memory-importer` companion (3.0) reads agentmemory's Obsidian vault

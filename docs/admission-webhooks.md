@@ -66,7 +66,7 @@ Webhooks fire on these `op` values today (extensible enum):
   report's `ledgers_undeleted` and retries it on the next run, and keeps the
   rest of the sweep going. Non-blocking observers are dispatched again after
   the removal is durable. (Per-event *appends* to ledgers still never fire
-  the chain — see below — this is the one ledger path that does.)
+  the chain; see below; this is the one ledger path that does.)
 - `purge_project`: a whole project is purged (`Wiki::purge_project` →
   `remove_dir_all`, routed from `/admin/purge-project`). Carries the
   project in `ctx`, **no** page path; fired before the directory is
@@ -220,7 +220,7 @@ X-Memory-Op: write_page | consolidate | delete | delete_event_ledger | purge_pro
              | move_session | handoff_begin | handoff_accept | handoff_cancel
 ```
 
-(The header carries one of the `AdmissionOp` values shown above — the source
+(The header carries one of the `AdmissionOp` values shown above; the source
 enum is the full catalog; the second line is a continuation of the list, not
 a second header.)
 

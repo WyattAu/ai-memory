@@ -1,4 +1,4 @@
-# codebase-memory-mcp — Research Report
+# codebase-memory-mcp: Research Report
 
 *Repo:* <https://github.com/DeusData/codebase-memory-mcp> · MIT · pure C,
 single static binary. *Snapshot:* 2026-09-03: ~42k stars, ~3.4k forks,
@@ -83,7 +83,7 @@ classification), `semantic_query` (vector search over the graph),
   ai-memory publishes LongMemEval numbers the same way; cbm's main metric is
   "queries vs grep tokens".
 
-## 6. What Good / What's Missing — Honest Take
+## 6. What Good / What's Missing: Honest Take
 
 **A complement, not a competitor.** cbm indexes the codebase; ai-memory
 indexes the work. cbm knows the code as it is right now; ai-memory knows the
@@ -115,13 +115,13 @@ are operational rather than architectural: tiered tool profiles, a published
 token-efficiency metric, and (optionally) a git-committed compressed index for
 teams that won't run a server.
 
-## 7. 2.1 Feasibility — grounded in ai-memory's code
+## 7. 2.1 Feasibility: grounded in ai-memory's code
 
 Each borrowable idea was checked against the current tree so the release call
 rests on real choke points. Verdicts: one 2.1 feature, one land-now dev
 metric, one deferred design.
 
-### 7.1 Tiered tool profiles — **recommend for 2.1**
+### 7.1 Tiered tool profiles: **recommend for 2.1**
 
 *Where it plugs in.* The MCP server exposes 23 tools through the rmcp
 `#[tool_router]` macro (`crates/ai-memory-mcp/src/server.rs:1239`), and
@@ -147,7 +147,7 @@ mirroring the existing `?flavor=` mechanism (`server.rs:3980`); filter
 `list_all()` by `tool_call_is_write` before returning. No new classification
 logic is needed because the partition already exists.
 
-### 7.2 Token-efficiency metric — **land on main now (dev tooling, not a gated feature)**
+### 7.2 Token-efficiency metric: **land on main now (dev tooling, not a gated feature)**
 
 *Where it plugs in.* The `evals/` crate measures hit@k / recall@k only
 (`evals/src/retrieval/score.rs`). The full `memory_query` JSON payload is
@@ -161,7 +161,7 @@ user-facing. It is an eval/benchmark improvement that complements LongMemEval
 recall: *recall* says we find the answer, *tokens-to-answer* says we deliver it
 cheaply. It can go to `main` at any time, independent of the 2.1 train.
 
-### 7.3 Committed compressed derived-index — **defer (design-only until a server-less use-case exists)**
+### 7.3 Committed compressed derived-index: **defer (design-only until a server-less use-case exists)**
 
 *Where it plugs in.* The DB is contractually derived and rebuildable:
 markdown-in-git is the source of truth, SQLite `db/` is the index

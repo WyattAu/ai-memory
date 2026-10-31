@@ -123,11 +123,11 @@ from hook paths.
    never delivered a `SessionEnd` (crashed harness, closed terminal) is ended
    by the maintenance tick when `[sessions] idle_end_after_hours` is set, with
    the tick's own page write, the consolidation job and the lifecycle-only
-   handoff release — no additional handoff from the tick. The page write is
+   handoff release; no additional handoff from the tick. The page write is
    conditional on the page version the selection captured in its own
    statement, and the end stamp is a CAS on `ended_at IS NULL` that also
    re-verifies the session's observation count (the digest's population) and
-   the latest page version — so a late real `SessionEnd` (or a checkpoint)
+   the latest page version; so a late real `SessionEnd` (or a checkpoint)
    wins that race and converges through `AlreadyEnded`/`ReEnd`. `ended_at` is
    the tick's clock (the session's last activity is preserved in the audit
    detail), and the consolidation job is enqueued inside the stamp's
@@ -228,8 +228,8 @@ from hook paths.
    for sessions already consolidated into a summary page that is still live, so
    raw capture is never removed while it is the last copy of that session's
    work, and never for a session that still has a `session_consolidation_jobs`
-   row in `pending` or `running` — a queued (or lease-stale) consolidation
-   still reads the raw capture — and never while the live observation count is
+   row in `pending` or `running`; a queued (or lease-stale) consolidation
+   still reads the raw capture; and never while the live observation count is
    newer than `sessions.ended_observation_count`, which closes the interval
    between resumed capture and its next queue insertion. The dry-run count
    applies the same guard for the same snapshot. It runs last so this run's own
@@ -253,7 +253,7 @@ from hook paths.
    content gate re-checked) rather than from the sweep. Each removal consults
    the blocking admission chain on the `delete_event_ledger` op, the same
    check a page delete runs: a `reject`-policy webhook keeps the file, which
-   the sweep counts in `ledgers_undeleted`, keeps going and retries next run —
+   the sweep counts in `ledgers_undeleted`, keeps going and retries next run -
    and non-blocking observers are dispatched only after the unlink. Ledgers are
    not pages:
    the store is only read, and a legacy `pages` row for a deleted ledger is left
@@ -1109,7 +1109,7 @@ contradiction_band_max = 0.75      # (lower/upper cosine-similarity edge). The b
                                    # single-domain store's background similarity sits well
                                    # above the general-purpose default, so the default band
                                    # ends up measuring domain proximity rather than conflict
-                                   # and produces noisy findings — raise `contradiction_band_min`
+                                   # and produces noisy findings: raise `contradiction_band_min`
                                    # for such a store. Must satisfy 0.0 <= min < max <= 1.0.
                                    # Env: AI_MEMORY_CONTRADICTION_BAND_MIN /
                                    # AI_MEMORY_CONTRADICTION_BAND_MAX
@@ -1160,7 +1160,7 @@ lint_interval_secs = 86400         # rule-based wiki lint; 0 disables (same pers
 embedding_backfill_interval_secs = 0  # embedding backfill; 0 = off (may call a paid provider)
 reconcile_tombstones_deleted_pages = false
                                    # opt-in (#929/#964): the 30s reconcile pass soft-tombstones
-                                   # (is_latest=0 + superseded_at — never a filesystem write) an
+                                   # (is_latest=0 + superseded_at: never a filesystem write) an
                                    # OKF-imported content page whose file has been missing on
                                    # two consecutive passes, behind a circuit breaker and with
                                    # session pages excluded. OFF = byte-identical to pre-2.5
@@ -1199,7 +1199,7 @@ ledger_retention_months = 0        # 0 = never delete hook event ledgers; N > 0 
                                    # its month ended (current + previous month
                                    # are never deleted)
 compact_cold_episodic = false      # A2 opt-in: tier-down (compact) a cold
-                                   # episodic page instead of evicting it —
+                                   # episodic page instead of evicting it -
                                    # keep abstract+summary+keep-tokens, drop
                                    # prose. Reversible (git + supersession),
                                    # zero-LLM. false = today's evict behaviour.
@@ -1219,7 +1219,7 @@ dedup_cold_clusters = false        # A3 opt-in: cluster near-duplicate cold
                                    # optional). Half-life in DAYS; converted to
                                    # λ = ln(2)/days. An omitted key falls back to
                                    # the scalar `lambda` above, so the default
-                                   # (no keys) is byte-identical to today — no
+                                   # (no keys) is byte-identical to today: no
                                    # score change or mass-eviction on upgrade.
 # working = 7                      # e.g. keep scratch short…
 # episodic = 365                   # …and session history long
@@ -1255,7 +1255,7 @@ max_input_tokens = 100000          # approximate whole-input target; min 8350 at
                                    # UNDER-budgets denser corpora: pt-BR prose
                                    # and source code tokenize at fewer chars per
                                    # token than English and can overshoot the
-                                   # provider's real limit by ~40% — lower this
+                                   # provider's real limit by ~40%: lower this
                                    # (or input_token_safety_margin) for such a corpus
 max_output_tokens = 32000          # provider generation limit; min 1000
                                    # their sum must fit the model context window;
@@ -1337,17 +1337,17 @@ observation_stream = true         # R1 observation-evidence stream: FTS over obs
 # stopwords = []                  # words dropped from a bare natural-language FTS query
                                   # before the OR-join. Three states:
                                   #   - key absent (the default): the built-in English list
-                                  #     (a/an/and/the/…, ~60 entries) — unchanged behaviour.
+                                  #     (a/an/and/the/…, ~60 entries): unchanged behaviour.
                                   #   - stopwords = []: disables the filter entirely, English
                                   #     included.
                                   #   - a non-empty list: REPLACES the default outright with
                                   #     exactly those words (does not extend the English list).
                                   # Entries are folded to lowercase with Unicode case folding
-                                  # (not ASCII-only — a sentence-initial "É" or all-caps "NÃO"
+                                  # (not ASCII-only: a sentence-initial "É" or all-caps "NÃO"
                                   # still matches a lowercase entry), and a query token is
                                   # compared the same way, but diacritics are never stripped:
                                   # "e" and "é" stay distinct. What matters here is how a query
-                                  # is actually TYPED, not how wiki content is spelled — content
+                                  # is actually TYPED, not how wiki content is spelled: content
                                   # matches through the FTS index's own diacritic-folding
                                   # tokenizer regardless, but this filter only ever sees the
                                   # literal characters someone typed. So a list for an accented
@@ -1355,7 +1355,7 @@ observation_stream = true         # R1 observation-evidence stream: FTS over obs
                                   # type, e.g. Portuguese BOTH "e" and "é", BOTH "nao" and "não".
                                   # The filter also matches whitespace-split raw tokens before
                                   # any punctuation handling, so an entry never matches a token
-                                  # with attached punctuation ("de," / "que?") — the same
+                                  # with attached punctuation ("de," / "que?"): the same
                                   # limitation English stopwords have always had. Explicit FTS5
                                   # syntax (quoted phrases, OR/AND/NOT/NEAR, parens) that FTS5
                                   # accepts bypasses this filter, exactly as it does with the
@@ -1369,16 +1369,16 @@ observation_stream = true         # R1 observation-evidence stream: FTS over obs
                                   # tokens); anything past that fails startup.
                                   #
                                   # Env override: AI_MEMORY_SEARCH_FTS_STOPWORDS as a
-                                  # comma-separated string — the same convention
+                                  # comma-separated string: the same convention
                                   # allowed_hosts/cors_allow_origins/auth.trusted_proxy_cidrs
-                                  # use for a Vec<String> — but read once as data in
+                                  # use for a Vec<String>: but read once as data in
                                   # Config::load rather than through the usual `__`-split env
                                   # layer, because a present-but-blank env var must mean
                                   # "unset" (leave config.toml's value alone), never an
                                   # accidental "disable filtering"; the automatic layer merges
                                   # raw values before any such distinction could be made.
                                   #
-                                  # Non-English example — a Portuguese-majority wiki, so its
+                                  # Non-English example: a Portuguese-majority wiki, so its
                                   # own function words (not English's) get filtered, spelling
                                   # out both accented and unaccented forms someone might type:
                                   # stopwords = [
@@ -1390,7 +1390,7 @@ observation_stream = true         # R1 observation-evidence stream: FTS over obs
 
 [dream]                           # B2/B3/B4 opt-in LLM "dream" pass. OFF by default,
                                   # R2-gated before it may default on. Never deletes a source.
-enabled = false                   # true starts the scheduled pass — but ONLY if a provider AND
+enabled = false                   # true starts the scheduled pass; but ONLY if a provider AND
                                   # an embedder are also configured. A provider-less store keeps
                                   # the zero-LLM A3 path untouched (invariant #13).
 interval_secs = 3600              # how often the scheduler CONSIDERS a run (0 ⇒ 3600)
@@ -1474,7 +1474,7 @@ AI_MEMORY_LLM_BASE_URL     required for openai-compat (Ollama, vLLM); optional o
 LLM_BASE_URL               the unprefixed cross-tool convention, accepted for
                            openai-compat and opencode only. Providers with a
                            fixed vendor endpoint (anthropic, openai, gemini,
-                           the OAuth backends, copilot) ignore it and log why —
+                           the OAuth backends, copilot) ignore it and log why -
                            an operator's leftover Ollama URL must not silently
                            rewrite every Gemini request into a 404
 AI_MEMORY_LLM_COMPAT_STRICT true by default; false disables response_format=json_schema
@@ -1505,7 +1505,7 @@ AI_MEMORY_LLM_HEADERS      optional extra HTTP headers on every chat request, as
                            initialization for the `openai-compat` provider,
                            which sends the operation's request id itself.
                            Values are never logged. A header value cannot
-                           contain a comma through the env var — use
+                           contain a comma through the env var; use
                            `llm_headers = [...]` in config.toml for that.
 AI_MEMORY_RERANKER         optional `llm`; reranks project/scopes query candidates
 COPILOT_GITHUB_TOKEN       optional GitHub token for copilot

@@ -150,7 +150,7 @@ drop_subagent_captures = "true"
 # `global=true`, and an unscoped `memory_recent` returns the most recent
 # pages across every project (each hit annotated with workspace + project).
 # Meant for meta-repos that constantly need sibling-project context.
-# Explicit args always win — passing `workspace`/`project`/`scopes`/
+# Explicit args always win: passing `workspace`/`project`/`scopes`/
 # `global` overrides this for that call. Off by default. Note: while
 # active, unscoped queries return cross-project `global_hits` instead
 # of project `hits` + `global_scope_hits` (the `_global` preference
@@ -159,12 +159,12 @@ drop_subagent_captures = "true"
 default_global = "true"
 
 # Optional. Inject a compiled project brief at session start (and after a
-# context clear — Claude Code re-fires SessionStart on /clear): the
+# context clear: Claude Code re-fires SessionStart on /clear): the
 # session-start handoff fetch also returns this project's pinned /
 # `_rules/` / `_slots/` wiki pages plus recently-updated page titles, so the
 # agent starts with the architecture context instead of re-exploring the
 # codebase. Appended AFTER any pending handoff, and
-# unlike the handoff it is not consumed — it is recomposed every opted-in
+# unlike the handoff it is not consumed: it is recomposed every opted-in
 # session start. Only agents whose session-start hook injects stdout as
 # context benefit (Claude Code, Codex, OpenCode, …). Off by default: the
 # brief costs tokens on EVERY session start, so opt in per repo.

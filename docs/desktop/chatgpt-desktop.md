@@ -6,7 +6,7 @@
 > (`Exec=omarchy-launch-webapp https://chatgpt.com/`), a browser wrapper
 > rather than the app, so this research rests on official docs.
 
-## 1. The ChatGPT desktop app (Codex host) — official
+## 1. The ChatGPT desktop app (Codex host): official
 
 As of 2026-10 OpenAI ships one desktop app that hosts both ChatGPT
 (chat/Work) and Codex (coding agent): "Download ChatGPT for macOS,
@@ -27,7 +27,7 @@ All MCP/hook mechanics of this app are covered in
   rollout JSONL on the Codex host. Chat-mode conversations are cloud-stored;
   no local transcript store documented.
 
-## 2. ChatGPT web/chat surfaces — connectors (remote MCP only)
+## 2. ChatGPT web/chat surfaces: connectors (remote MCP only)
 
 - "ChatGPT web can use remote MCP-backed tools supplied by plugins. Local
   Codex clients can also connect directly to MCP servers… ChatGPT web

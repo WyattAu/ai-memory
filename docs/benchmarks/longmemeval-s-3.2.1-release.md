@@ -93,7 +93,7 @@ CPU-sensitive. Two comparisons that are:
   removed the contention 3.2.0 added, and the reserved query slot keeps
   latency under 3.1.2's 98/225 as well.
 - FTS latency, which the embedding scheduler cannot touch, measured 12/84 ms
-  on the same loaded machine — further evidence the local numbers above are
+  on the same loaded machine; further evidence the local numbers above are
   load, not regression.
 
 Ingest wall clock is no longer comparable across releases: the fast procedure
@@ -107,6 +107,6 @@ load is roughly ±15%.
 The 3.2.0 accuracy loss was boundary-question noise, not a ranking change:
 with the capacity fix landed, the same questions flip between identical
 builds, and this release run recovered both moved slices. The real 3.2.0
-regressions — serialized document embedding, silently degraded queries,
-higher latency under load — are fixed and measured. No follow-up retrieval
+regressions; serialized document embedding, silently degraded queries,
+higher latency under load; are fixed and measured. No follow-up retrieval
 work is required from #1580.

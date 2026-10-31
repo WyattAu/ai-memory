@@ -40,7 +40,7 @@ ai-memory-wikisync plan \
     --dest ./wiki \
     --include _rules --include decisions
 
-# Same listing, then write — export without --apply is still a dry-run.
+# Same listing, then write: export without --apply is still a dry-run.
 ai-memory-wikisync export ... --apply
 
 # Two-way: dry-run plan of imports and exports, then apply it.

@@ -692,8 +692,8 @@ ai-memory install-hooks --agent dsh --apply \
 `--apply` stages the `hooks/dsh` scripts under the data dir and writes a
 generated Claude Code `hooks.json` next to them (native `ai-memory hook`
 commands by default, so capture enforces capture exclusions and keeps the
-local spool). It then prints the bridge patch fragment — a `- insert:` item
-mounted under the DSH profile patch — which you merge into
+local spool). It then prints the bridge patch fragment; a `- insert:` item
+mounted under the DSH profile patch; which you merge into
 `$DSH_HOME/profiles/<profile>/cordis.patch.yml` by hand, because that file is
 a hand-maintained YAML patch layer (the same reason `install-mcp --client
 dsh` refuses to write it):

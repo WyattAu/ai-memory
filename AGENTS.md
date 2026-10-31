@@ -52,7 +52,7 @@ to remember or annotate something permanently. For an explicitly time-bounded no
 set `expires_at`; expired pages are hidden from normal reads and deleted by the next
 forget sweep, and a TTL outranks `pinned`. ai-memory is the cross-harness memory of
 record for this project: if the harness you run in has its own local memory feature,
-do not keep durable project facts there in parallel — a harness-local store is
+do not keep durable project facts there in parallel; a harness-local store is
 invisible to every other agent and fragments continuity, so capture them here instead.
 A reviewed decision record kept in the repository (an ADR directory, a Keep the Why
 `context/` tree) is not a harness-local store: when the project keeps one, record
@@ -111,7 +111,7 @@ developer's own `CLAUDE.local.md`) load the same rules at session start.
 
 If the rule is a standing *user/team* preference that should apply to
 every project (tech choices, code style, personal conventions), save it
-to ai-memory's cross-project profile instead (`scope: "profile"`) — the
+to ai-memory's cross-project profile instead (`scope: "profile"`); the
 durable-pages skill covers how. Every project receives the profile as
 defaults at session start, below its own rules file.
 
@@ -137,12 +137,12 @@ Both are idempotent: re-runs replace the block delimited by the ai-memory
 start/end HTML-comment markers, without disturbing the rest of the file.
 <!-- ai-memory:end -->
 
-# AGENTS.md — ai-memory contributor guide
+# AGENTS.md: ai-memory contributor guide
 
 This file is the single canonical instruction file for AI coding agents
 working in this repository (Claude Code, Codex, OpenCode, OpenCode 2, Cursor, Gemini
 CLI, Kimi Code, Command Code, and other AGENTS-aware harnesses). `CLAUDE.md` is only a
-short pointer here — do not duplicate rules into it.
+short pointer here; do not duplicate rules into it.
 
 ## Project overview
 
@@ -229,12 +229,12 @@ crates/
 └── ai-memory-cli/         `ai-memory` binary entry point + thin HTTP subcommands.
 evals/                     live A/B harness; workspace member, not shipped.
 companions/ai-memory-importer/  standalone OMC, external-conversation and agentmemory importer; NOT a root
-                           workspace member — build/test it with
+                           workspace member; build/test it with
                            `--manifest-path companions/ai-memory-importer/Cargo.toml`.
 companions/ai-memory-client/    capture-privacy helpers shared by relay + importer; own workspace.
 companions/ai-memory-relay/     durable external-lifecycle event relay (POST /hook/batch); own workspace.
 companions/ai-memory-wikisync/  team-wiki git sync through the public MCP tools; own workspace.
-companions/ai-memory-macos/     Swift menu bar wrapper; NOT a root workspace member —
+companions/ai-memory-macos/     Swift menu bar wrapper; NOT a root workspace member -
                            `swift test --package-path companions/ai-memory-macos`
                            and `./companions/ai-memory-macos/build.sh`.
 companions/ai-memory-ts/        optional TypeScript client SDK (npm, Node 22+); NOT a workspace
@@ -245,7 +245,7 @@ hooks/                     per-agent lifecycle hook bundles (shell/native).
 plugins/                   generated Claude Code + Codex marketplace plugins (catalogs in
                            `.claude-plugin/`, `.agents/plugins/`); edit the templates in
                            `crates/ai-memory-cli/templates/plugin/` and re-run
-                           `ai-memory render-plugins --out .` — a test fails on drift.
+                           `ai-memory render-plugins --out .`; a test fails on drift.
 bin/                       host wrapper scripts (`ai-memory`, `deploy`, `release`).
 install.sh                 two-command native install, step one (release asset).
 INSTALL_FOR_AGENTS.md      how an AI agent installs ai-memory for its user.
@@ -418,7 +418,7 @@ covers the same tests, slower, no tiers.
   hooks crates, `install_hooks.rs`, `hooks/`, `tests/hooks/`, `bin/ai-memory.ps1`
   and the packaging fixtures that run it). It is the only
   place `#[cfg(windows)]` tests run, and it is ~4x slower than the same tests
-  on Linux — keeping it out of `ci.yml` is what holds PR feedback near the
+  on Linux; keeping it out of `ci.yml` is what holds PR feedback near the
   eight minutes the gating jobs take. **Add the `windows` label** to force a
   run on a PR outside those paths that still touches path handling, file
   locking or git plumbing. `ci.yml`'s `windows-cross` job cross-builds every
@@ -500,12 +500,12 @@ prior-art bug (see `docs/ARCHITECTURE.md` and `docs/issues-*.md`):
 14. **Provider auth resolves before provider construction**; provider
     clients consume typed `ProviderAuth` material and never read env vars
     directly.
-15. **Tracing subscribers explicitly filter their own module** — no
+15. **Tracing subscribers explicitly filter their own module**; no
     feedback loops.
 
 16. **Multi-session and multi-user access to one project is a core
     capability.** One operator running several harnesses at once, and
-    several operators sharing one server, must both work — and knowledge
+    several operators sharing one server, must both work; and knowledge
     written by either must be readable by the other in the same project.
     Concretely:
     - **Pages are shared, batons are owned.** `pages.author_id` exists for
@@ -523,7 +523,7 @@ prior-art bug (see `docs/ARCHITECTURE.md` and `docs/issues-*.md`):
     - **The active-project pointer is keyed by the caller's coordinate**
       (`ActiveProjectMode::PerActor` by default), so parallel harnesses and
       separate operators cannot overwrite each other's notion of "current
-      project" — which unscoped *writes* also resolve through.
+      project"; which unscoped *writes* also resolve through.
 
     Unit tests do not cover this: they exercise one session at a time, which
     is the exact shape that cannot see a collaboration or concurrency defect.
@@ -538,7 +538,7 @@ Additional boundary rules:
 - **Scope resolution:** new MCP/admin/web routes must use
   `ai_memory_store::ScopeResolver` or its explicit helpers
   (`lookup_existing_scope`, `create_explicit_scope`,
-  `resolve_many_existing_scopes`) — never hand-rolled workspace/project
+  `resolve_many_existing_scopes`); never hand-rolled workspace/project
   lookup chains. Read/search/embed/retention/destructive paths use
   no-create lookups and fail closed on partial or missing scope; only
   explicit write/create paths may create workspaces or projects.
@@ -562,7 +562,7 @@ Additional boundary rules:
   machine config: pass `--no-gpg-sign` on every fixture commit (a global
   `commit.gpgsign = true` otherwise signs as the fixture's fake identity and
   fails), and build `git2` signatures with a fixed `Signature::now(...)`,
-  never `repo.signature()`. CI cannot catch either — its runners have no
+  never `repo.signature()`. CI cannot catch either; its runners have no
   global gitconfig, so the breakage only ever shows up on a developer's box.
 - **Security-boundary tests are adversarial and mandatory.**
   [`docs/security-boundaries.md`](docs/security-boundaries.md) is the inventory
@@ -572,15 +572,15 @@ Additional boundary rules:
   active-project pointer, the sanitizer boundary, messaging scope, scope-
   resolution fail-closed, destructive-op guards, hook backpressure, network
   posture), each mapped to the test that would fail if the guard were removed.
-  Whenever you touch code in a boundary's "Enforcing code" column — or add a
-  new read/write/admin/hook/cross-scope entry point past one of these guards —
+  Whenever you touch code in a boundary's "Enforcing code" column; or add a
+  new read/write/admin/hook/cross-scope entry point past one of these guards -
   you MUST add or extend an **adversarial** test (attempt the violation, assert
   refusal, include a legitimate control) and update that file's row in the same
   change. Adding a new isolation dimension means a new row + its tests before
   merge. A raw-id or unscoped/cross-project entry point (bare `session_id`/
   `run_id`/`page_id`/message id, `global=true`, global `recent`, search) is
   guilty until a test proves a foreign id/scope is refused. Prove the test
-  bites: it must fail with the guard removed and pass with it — a happy-path or
+  bites: it must fail with the guard removed and pass with it; a happy-path or
   single-tenant test cannot see an isolation defect and does not count. These
   guards live at integration level (`multi_session.rs`, `handoff_ownership.rs`,
   `agent_messages.rs`, the active-project pointer tests, the MCP permission
@@ -588,7 +588,7 @@ Additional boundary rules:
   and "permissions" test rules: PRs touching scope resolution still need
   table-driven tests for partial scope, missing explicit scope, active-project
   precedence, and cross-workspace isolation; PRs touching permissions still need
-  root, DB-user, and anonymous cases — now recorded against the inventory.
+  root, DB-user, and anonymous cases; now recorded against the inventory.
 - New disk+SQL mutations need recovery/rollback tests.
 - **A changed default reaches every consumer.** When a change alters a default
   or where a setting or credential lives (auth on for new installs, a token
@@ -628,7 +628,7 @@ Additional boundary rules:
   actor).
 - **Capture exclusions** (`[capture] ignore_paths` in the nearest
   `.ai-memory.toml` marker) drop recognized file-tool events before they
-  reach spool, transport, logs, or storage — preserve this behavior in
+  reach spool, transport, logs, or storage; preserve this behavior in
   native hook commands and generated integrations.
 - **Auth ladder** (`docs/users.md`): anonymous (no bearer configured) →
   static root bearer → proxy-asserted user (a distinct
@@ -649,7 +649,7 @@ Additional boundary rules:
   behavior, installation, supported platforms/agents/providers,
   deployment, env/config, or public tool/admin surfaces must add a
   `CHANGELOG.md` entry under `## [Unreleased]` (correct Keep-a-Changelog
-  heading — `Added`/`Changed`/`Deprecated`/`Removed`/`Fixed`/`Security` —
+  heading; `Added`/`Changed`/`Deprecated`/`Removed`/`Fixed`/`Security` -
   past-tense, trailing `(#NNN)` reference) and update the relevant
   README/docs references in the same commit. Internal refactors and
   test-only churn are exempt. CI rejects a duplicated heading
@@ -664,10 +664,10 @@ Additional boundary rules:
   a long CHANGELOG entry, an RFC or design note), goes through the `humanizer`
   skill (a maintainer-side skill; contributors without it leave the pass to
   review) before it is committed: it strips AI-writing patterns while keeping
-  every fact. Prose only — code blocks, commands, paths, link targets and
+  every fact. Prose only; code blocks, commands, paths, link targets and
   headings (anchors) stay unchanged, and a rewrite that adds or drops a fact is
   a defect. Released CHANGELOG sections are frozen and are not rewritten.
-- **Competitor research keeps the comparison docs in sync — never let them
+- **Competitor research keeps the comparison docs in sync; never let them
   go stale.** Any new competitor research pass, or a correction to an existing
   one, must land its findings in the comparison docs in the *same* change, not
   just in a research note: update `docs/comparison.md` (the public camp table +
@@ -676,7 +676,7 @@ Additional boundary rules:
   convention), and `docs/competitive-parity.md` (the migration verdict + the
   "did we copy without improving?" audit) wherever the finding applies. When a
   competitor is reclassified or a claim is corrected, fix the camp table *and*
-  every per-tool claim that repeats it — a benchmark number, a "not file-first",
+  every per-tool claim that repeats it; a benchmark number, a "not file-first",
   a camp label. This is a recurring failure: the Sept-2026 parity audit found
   Supermemory mislabeled as a fact extractor, agentmemory's `0.967` attributed
   to the wrong benchmark, and basic-memory's shipped reranking/Teams unrecorded.
@@ -693,13 +693,13 @@ Additional boundary rules:
   same rule: Darwin nix build and the privileged NixOS container smoke need
   `nix` / `full-ci`, schedule, or dispatch (not every `Cargo.lock` bump).
   Never tag a release whose SHA lacks a green full matrix.
-- **Every release updates the Homebrew tap — do not forget it.** After
+- **Every release updates the Homebrew tap; do not forget it.** After
   `release.yml` publishes the GitHub release and its per-target tarballs,
   update `~/Projects/homebrew-tap/Formula/ai-memory.rb`: bump `version` and
   set each platform `sha256` to the value from the release's published
   `ai-memory-<target>.tar.gz.sha256` assets (`macos-aarch64`, `macos-x86_64`,
   `linux-aarch64`, `linux-x86_64`), then commit (`ai-memory X.Y.Z`) and push
-  the tap. Verify each `sha256` matches the published asset before pushing — a
+  the tap. Verify each `sha256` matches the published asset before pushing; a
   wrong hash makes `brew install` fail for everyone. This is a mandatory,
   recurring post-release step (it has been forgotten repeatedly); do not rely
   on a contributor PR to the tap to remember it.
@@ -731,14 +731,14 @@ Additional boundary rules:
     release with the slice deltas, run dirs and suspected commits, to decide
     there whether it is a regression, noise or a warranted trade. A release
     that touches retrieval should still aim to improve these numbers.
-- **Reclaim build storage after every release — run `cargo clean`.** The
+- **Reclaim build storage after every release; run `cargo clean`.** The
   multi-worktree, multi-target-dir release flow (integration worktrees, per-agent
   worktrees, separate `CARGO_TARGET_DIR`s) leaves many stale 100–180 MB test
   binaries behind and has exhausted disk (see the `target/` bloat note under
   Platform notes). Once a release is tagged and its artifacts are published, run
   `cargo clean` (and `cargo clean` in each release worktree / extra target dir
   you created, then remove finished `git worktree`s). This is a mandatory
-  post-release cleanup step, not optional housekeeping — treat it like the tap
+  post-release cleanup step, not optional housekeeping; treat it like the tap
   bump above. During normal development, the weekly `cargo clean` and
   `cargo clean-all --keep-days 7` described under Platform notes are the
   lighter-touch equivalent.
@@ -770,7 +770,7 @@ Additional boundary rules:
   provider); major = breaking (on-disk format without migration, removed
   subcommands, breaking MCP schema changes, big rewrites).
 - **Release cadence and ordering.** Batch tickets by semver impact and
-  ship fixes as a patch release promptly — never let a bug fix wait on
+  ship fixes as a patch release promptly; never let a bug fix wait on
   unreleased feature work. The `[Unreleased]` section signals the bump:
   only `### Fixed` → patch; any `### Added` → minor; anything breaking →
   major. Bucket incoming work at triage with the `breaking-change` label
@@ -791,41 +791,41 @@ Additional boundary rules:
 
 ## Documentation map
 
-- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — operational map: data
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md); operational map: data
   flow, crate breakdown, schema, invariants, config reference.
-- [`docs/design-decisions.md`](docs/design-decisions.md) — full v1 spec
+- [`docs/design-decisions.md`](docs/design-decisions.md); full v1 spec
   and milestone plan.
-- [`docs/install.md`](docs/install.md) — installation cookbook for every
+- [`docs/install.md`](docs/install.md); installation cookbook for every
   supported agent client.
-- [`docs/cookbook.md`](docs/cookbook.md) — task-oriented cheat sheet: "I want
+- [`docs/cookbook.md`](docs/cookbook.md); task-oriented cheat sheet: "I want
   to do X" → how (recall, durable rules and must-read docs, importing a
   knowledge base, retention, two agents working together, several accounts or
   an external launcher via `run --env`, the Mac app, CLI, troubleshooting).
-- [`docs/comparison.md`](docs/comparison.md) — fair, user-facing comparison
+- [`docs/comparison.md`](docs/comparison.md); fair, user-facing comparison
   against other memory tools (camps, migration notes, how the field validates
   the file-first/pages-over-facts approach). Analysis behind it:
   `research-2026-landscape.md`.
-- [`docs/competitive-parity.md`](docs/competitive-parity.md) — self-critical
+- [`docs/competitive-parity.md`](docs/competitive-parity.md); self-critical
   internal audit: per-competitor migration-worthiness (do we do the basics +
   add enough to justify switching?), the "did we copy without improving?"
   borrowed-ideas verdicts, and documented gap-fill recommendations.
-- [`docs/security-boundaries.md`](docs/security-boundaries.md) — inventory of
+- [`docs/security-boundaries.md`](docs/security-boundaries.md); inventory of
   every isolation/security guard and the test that bites if it is removed.
-- [`docs/external-lifecycle.md`](docs/external-lifecycle.md) — the relay and
+- [`docs/external-lifecycle.md`](docs/external-lifecycle.md); the relay and
   external lifecycle event contract.
-- [`docs/lifecycle-ops.md`](docs/lifecycle-ops.md) — read before touching
+- [`docs/lifecycle-ops.md`](docs/lifecycle-ops.md); read before touching
   purge/rename/backup/restore/reset/reindex/restore-page.
-- [`docs/auto-improvement-loop.md`](docs/auto-improvement-loop.md) —
+- [`docs/auto-improvement-loop.md`](docs/auto-improvement-loop.md) -
   learning-loop design, approval gates, curator boundaries.
-- [`docs/users.md`](docs/users.md) — multi-user attribution and the
+- [`docs/users.md`](docs/users.md); multi-user attribution and the
   four-rung auth ladder.
-- [`docs/managed-workstreams.md`](docs/managed-workstreams.md) —
+- [`docs/managed-workstreams.md`](docs/managed-workstreams.md) -
   `ai-memory run` cross-harness continuity.
-- [`docs/agent-messaging.md`](docs/agent-messaging.md) — cross-project
+- [`docs/agent-messaging.md`](docs/agent-messaging.md); cross-project
   agent-to-agent inbox/queue and the on-start hot-context notice.
-- [`docs/companion-crates.md`](docs/companion-crates.md) — boundary for
+- [`docs/companion-crates.md`](docs/companion-crates.md); boundary for
   optional companion projects (e.g. the importer).
-- [`docs/desktop/`](docs/desktop/) — research notes and phased plan for
+- [`docs/desktop/`](docs/desktop/); research notes and phased plan for
   GUI/desktop-app support (Claude Desktop, Codex desktop, Antigravity IDE,
   ChatGPT/Grok desktop, Zed): verified per-app mechanics, capture/dedup
   design, installer + CLI coexistence. Reconciles RFC #878; read before

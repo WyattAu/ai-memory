@@ -1025,7 +1025,7 @@ opt-in**: enable the server first, then the client:
 
    ```bash
    ai-memory install-hooks --agent claude-code --capture-assistant --apply
-   # Codex is supported too — its Stop payload carries last_assistant_message:
+   # Codex is supported too: its Stop payload carries last_assistant_message:
    ai-memory install-hooks --agent codex --capture-assistant --apply
    ```
 
@@ -1331,7 +1331,7 @@ docker run --rm akitaonrails/ai-memory:latest \
     --server-url "http://homelab:49374/mcp" \
     --auth-token "$TOKEN"
 
-# Hooks — extract scripts + render config:
+# Hooks: extract scripts + render config:
 docker cp ai-memory:/usr/local/share/ai-memory/hooks ~/.ai-memory/
 docker run --rm akitaonrails/ai-memory:latest \
     install-hooks --agent codex \
@@ -2268,7 +2268,7 @@ docker run --rm akitaonrails/ai-memory:latest \
     --server-url "http://homelab:49374/mcp" \
     --auth-token "$TOKEN"
 
-# Extension — write to ~/.omp/agent/extensions/ai-memory-omp.ts.
+# Extension: write to ~/.omp/agent/extensions/ai-memory-omp.ts.
 # If you have the local wrapper installed, prefer `--apply`:
 ai-memory install-hooks --agent omp --apply \
     --server-url "http://homelab:49374" \
@@ -2688,7 +2688,7 @@ chmod +x "$installer_tmp/ai-memory-install-hooks"
 rm -rf "$installer_tmp"
 trap - EXIT
 
-# Then render the JSON config (still wants `ai-memory` somewhere —
+# Then render the JSON config (still wants `ai-memory` somewhere -
 # either via docker as a one-shot, or installed locally):
 docker run --rm akitaonrails/ai-memory:latest \
     install-hooks --agent claude-code \
@@ -2896,9 +2896,9 @@ never borrow another role's key. With `EMBEDDING_API_KEY` unset, key
 resolution is exactly what it was before the variable existed.
 
 ```bash
-# Chat on api.openai.com — `openai` is the provider that sends
+# Chat on api.openai.com: `openai` is the provider that sends
 # `max_completion_tokens`, which gpt-5 / o-series models require and
-# `openai-compat` never emits — with embeddings on another endpoint.
+# `openai-compat` never emits: with embeddings on another endpoint.
 export AI_MEMORY_LLM_PROVIDER=openai
 export OPENAI_API_KEY=sk-...
 export AI_MEMORY_EMBEDDING_PROVIDER=openai
@@ -3505,7 +3505,7 @@ remote or uses a custom host/port.
 --workspace <NAME>         (default: the nearest `.ai-memory.toml` marker's
                             `workspace`, else "default")
 --project <NAME>           (default: the marker's `project` when pinned,
-                            else derived from cwd — main repo root's
+                            else derived from cwd; main repo root's
                             basename via `git rev-parse --show-toplevel`,
                             or basename(cwd) when no repo is found.
                             "scratch" only as a defensive fallback for

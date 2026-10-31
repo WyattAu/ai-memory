@@ -17,7 +17,7 @@ machine runs the IDE (`/usr/share/applications/antigravity-ide.desktop`,
 `~/.gemini/` exists locally with `antigravity-cli/` and `antigravity-ide/`
 subdirs plus `config/`, `settings.json`, `oauth_creds.json`.
 
-## MCP client support — yes, store-backed and file-configurable
+## MCP client support: yes, store-backed and file-configurable
 
 Official: <https://antigravity.google/docs/mcp/>
 
@@ -39,7 +39,7 @@ Official: <https://antigravity.google/docs/mcp/>
   file (repo `docs/mcp-install.md`). An HTTP ai-memory server fits the
   `serverUrl` entry shape directly.
 
-## Lifecycle hooks — YES (the standout alongside Claude/Codex/Cursor)
+## Lifecycle hooks: YES (the standout alongside Claude/Codex/Cursor)
 
 Official: <https://antigravity.google/docs/hooks/>
 

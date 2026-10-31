@@ -1,4 +1,4 @@
-# LongMemEval-S retrieval — 2026-09-01T22:19:24.828453944Z
+# LongMemEval-S retrieval: 2026-09-01T22:19:24.828453944Z
 
 - commit: `0ac0dcf8f89a1f12d38f68e776e8aa1ab08a0f96`
 - dataset: `longmemeval_s` (sha256 `08d8dad4be43ee20…`)

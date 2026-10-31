@@ -1,4 +1,4 @@
-# Design: memory aging — decay curves, tier-down, dream pass, access-weighting (2.4)
+# Design: memory aging: decay curves, tier-down, dream pass, access-weighting (2.4)
 
 **Status: implemented in 2.4.** The zero-LLM aging set and the opt-in LLM
 dream pass shipped; ranking-affecting and lossy behavior remains default-off
@@ -22,7 +22,7 @@ and the R2/R7 roadmap items in
 
 ---
 
-## Current state (verified against the code — do not rebuild this)
+## Current state (verified against the code: do not rebuild this)
 
 The aging machinery is further along than a first reading suggests. What exists:
 
@@ -59,7 +59,7 @@ and curator, never by retrieval ranking.** `reader.rs:3957-3975`
 read the score. Any proposal that wants aging to influence *ranking* is a new
 behavior, not a re-wiring.
 
-### Access reinforcement — already built (M8), with one gap
+### Access reinforcement: already built (M8), with one gap
 
 `ops::bump_access_for_pages_for_actor` (`ops.rs:2151`, inserting into
 `page_access` at `ops.rs:2190`) bumps `access_count` + `last_accessed_at` +
@@ -137,13 +137,13 @@ are vendor claims, not our measurements. Sources:
 | Tool | Aging / decay | Compression | Dedup / merge | Reinforcement | Belief / contradiction | Dream trigger |
 |---|---|---|---|---|---|---|
 | **mcp-memory-service** | type-dependent TTL 365/180/90/30d; multi-horizon schedule | extractive 500-char + regex | DBSCAN, adaptive-eps | access + connection + quality boosts | confidence = support − contradict − decay; contradiction via 0.4–0.75 similarity band | scheduled |
-| **Honcho Dreamer** | — | — | ≥2-evidence induction | — | surprisal-first ordering | event + idle, cancel-on-activity |
-| **Supermemory** | TTL expiry | — | Updates / Extends / Derives supersession | — | supersession types | dream-when-idle |
-| **Letta sleep-time** | `forgetAfter` | idle shared-block rewrite | block rewrite | — | — | idle |
-| **Hindsight** | belief decay | — | extend/merge beliefs | proof-count strengthens | belief-strength (proof count); **failure = belief entrenchment** | — |
-| **OpenViking** | L0/L1/L2 progressive tiers | tier-down | create / merge / skip | — | — | — |
-| **agentmemory** | exp decay (validates ours) | **zero-LLM compression default** | — | access boost | — | — |
-| **A-MEM / Mem0** | none (no decay) | — | link-evolution / consolidate-on-write | — | — | on-write |
+| **Honcho Dreamer** | - |; | ≥2-evidence induction | - | surprisal-first ordering | event + idle, cancel-on-activity |
+| **Supermemory** | TTL expiry | - | Updates / Extends / Derives supersession | - | supersession types | dream-when-idle |
+| **Letta sleep-time** | `forgetAfter` | idle shared-block rewrite | block rewrite | - |; | idle |
+| **Hindsight** | belief decay | - | extend/merge beliefs | proof-count strengthens | belief-strength (proof count); **failure = belief entrenchment** | - |
+| **OpenViking** | L0/L1/L2 progressive tiers | tier-down | create / merge / skip | - |; | - |
+| **agentmemory** | exp decay (validates ours) | **zero-LLM compression default** | - | access boost | - |; |
+| **A-MEM / Mem0** | none (no decay) | - | link-evolution / consolidate-on-write | - |; | on-write |
 
 Takeaways that shape the design: (1) type-dependent retention is the near-universal
 next step past a single λ (mcp-memory-service, Letta, OpenViking); (2) extractive,
@@ -156,12 +156,12 @@ warning, and our B1 must design against it.
 
 ---
 
-## The design — three buckets
+## The design: three buckets
 
 Each item states **what / why / mechanism / schema delta / invariants / R2 bar /
 failure modes**. Latest migration on disk is V64; new migrations start at **V65**.
 
-### Bucket A — zero-LLM decay / compression (invariant #13 intact)
+### Bucket A: zero-LLM decay / compression (invariant #13 intact)
 
 Everything in A works with no provider and does not require ranking changes.
 
@@ -283,7 +283,7 @@ warm-up, excluding fixture creation. Both run offline without an LLM. Timing has
 no pass threshold and is not a benchmark of a full store. Neither changes lint's
 public classification; that decision remains in the RFC.
 
-### Bucket B — LLM "dream" pass (opt-in, OFF by default, R2-gated)
+### Bucket B: LLM "dream" pass (opt-in, OFF by default, R2-gated)
 
 All of B is off by default and touches either ranking or LLM; each gates on R2.
 
@@ -344,7 +344,7 @@ All of B is off by default and touches either ranking or LLM; each gates on R2.
 - *Failure modes:* proxy diverges from true surprisal → it only *orders* bounded
   work, worst case is suboptimal ordering, not wrong output.
 
-### Bucket C — access-weighted retention (the user's specific ask; mostly built)
+### Bucket C: access-weighted retention (the user's specific ask; mostly built)
 
 **C1. Close the read-path reinforcement gap.**
 - *What:* wire `spawn_access_bump` into `memory_read_page` (`server.rs:3612`), the
@@ -397,7 +397,7 @@ All of B is off by default and touches either ranking or LLM; each gates on R2.
 |---|---|---|
 | V65 | `pages.compacted_at` (nullable) + frontmatter `compacted` marker | A2 (and read by A3) |
 | V66 *(only if needed)* | `contradicts` edge kind, if not already expressible | A5 |
-| — | none | A1, A3-merge-provenance (reuse `page_evidence`), A4, B1-B4 (reuse V37/V61/V63), C1-C3 (reuse V03/V43/`page_links`) |
+| - | none | A1, A3-merge-provenance (reuse `page_evidence`), A4, B1-B4 (reuse V37/V61/V63), C1-C3 (reuse V03/V43/`page_links`) |
 
 Most of the design ships **without new columns**: the substrate (V37 salience,
 V43 per-actor access, V61 abstracts, V63 evidence, `page_links`) already exists

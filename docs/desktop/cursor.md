@@ -19,7 +19,7 @@ ai-memory already supports Cursor: `install-mcp --client cursor`
 cursor` (`~/.cursor/hooks.json`, flat `{"version": 1, "hooks": {...}}`
 schema); see `docs/mcp-install.md#cursor`.
 
-## Lifecycle hooks — which files run where
+## Lifecycle hooks: which files run where
 
 Per <https://cursor.com/docs/hooks> (fetched 2026-10-08):
 

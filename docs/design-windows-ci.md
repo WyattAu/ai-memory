@@ -132,7 +132,7 @@ Each option is assessed on setup complexity, one-time and per-run cost, resource
 licensing, security posture (especially public-repo / fork-PR exposure), maintenance, the
 coverage it gives against the surface above, and how it integrates with `windows.yml`.
 
-### Option A — `dockur/windows` VM on marvin, for **local on-demand** runs
+### Option A: `dockur/windows` VM on marvin, for **local on-demand** runs
 
 Run a Windows guest as a KVM/QEMU VM inside a Docker container on marvin
 (`dockur/windows`), driven from the Linux host by a `bin/`-style helper: bring the VM up,
@@ -178,7 +178,7 @@ sync the repo in (bind-mounted `/shared` → drive `Z:` in the guest, or RDP/SSH
   as-is for drift detection; the VM becomes the *fast* pre-merge and mandatory pre-release
   path (dispatching `windows.yml` on the RC SHA still happens, as a second safeguard).
 
-### Option B — Self-hosted GitHub Actions Windows runner on marvin (dockur or dedicated VM)
+### Option B: Self-hosted GitHub Actions Windows runner on marvin (dockur or dedicated VM)
 
 Register a self-hosted `windows` runner (inside a dockur VM or a dedicated Windows VM on
 marvin) and point `windows.yml`'s `runs-on` at it.
@@ -210,7 +210,7 @@ marvin) and point `windows.yml`'s `runs-on` at it.
   fork-PR *feedback* need is better served by keeping GitHub-hosted `windows-latest` (which
   GitHub licenses and isolates) for that case.
 
-### Option C — Cross-compile from Linux (`gnu` / `msvc` via `cargo-xwin`), plus Wine for a subset
+### Option C: Cross-compile from Linux (`gnu` / `msvc` via `cargo-xwin`), plus Wine for a subset
 
 - **`cargo build --target x86_64-pc-windows-gnu`** (MinGW-w64) and
   **`x86_64-pc-windows-msvc` via `cargo-xwin`** produce Windows binaries from Linux and
@@ -238,7 +238,7 @@ marvin) and point `windows.yml`'s `runs-on` at it.
   correctness. Treat cross-compile as a supplement to Option A, and treat Wine as
   out of scope.
 
-### Option D — Keep `windows-latest`, just harden (the do-less baseline)
+### Option D: Keep `windows-latest`, just harden (the do-less baseline)
 
 Status quo plus more flake-hardening: keep the label gate + nightly + pre-release
 dispatch, and keep widening the timing tolerances (the 60s connect deadline, relaxed eval-gate
@@ -384,7 +384,7 @@ Repo grounding (this repository): `.github/workflows/windows.yml`;
 `docs/windows.md`; CHANGELOG + commits `94057581` (#842), `032ec2fc`, `2cd18840`/`d5afdcbf`
 (#758), and PR #827.
 
-## Phase 1 results — measured on marvin (2026-09-22)
+## Phase 1 results: measured on marvin (2026-09-22)
 
 The study above proposed Phase 1 as "provision the VM manually and **measure**, because
 the dockur README publishes no benchmark and that number decides whether Phase 2 is worth
@@ -416,8 +416,8 @@ writes, libgit2 path fallback). Measured with the GNU toolchain (rustc 1.95 + Mi
 |---|---|---|---|
 | Cold full (`test --workspace --all-targets`, first compile) | **2408s (~40m)** | **3146s (~52m)** | 400 crates, all tests ok; cold is compile-bound, CoW makes no reliable difference (run variance) |
 | Warm full (nothing changed, test execution only) | **1600s (~27m)** | **1193s (~20m)** | 0 recompiled, pure *test-execution*; CoW-off is ~25% faster here |
-| Warm single crate (`test -p ai-memory-hooks`) | **73s** | — | the realistic focused-iteration cost |
-| GitHub `windows-latest` full run (from the study) | **~1000s** | — | warm cache |
+| Warm single crate (`test -p ai-memory-hooks`) | **73s** | - | the realistic focused-iteration cost |
+| GitHub `windows-latest` full run (from the study) | **~1000s** | - | warm cache |
 
 The decisive and unwelcome result: **the warm full suite is slower than `windows-latest`
 (~1000s)** whether or not CoW is disabled, and the time goes to *test execution*, not

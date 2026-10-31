@@ -195,7 +195,7 @@ for the two bypass classes above:
   grants, both still admit root and the creator; a caller on an `open` project is
   unaffected.
 
-## Identity routing (slice 4, #925 — resolved: always-on)
+## Identity routing (slice 4, #925: resolved: always-on)
 
 Authorization is only sound if two unrelated checkouts that happen to share a
 folder basename (`~/work/api` and `~/clients/acme/api`) resolve to **different**
@@ -224,7 +224,7 @@ not opt in, defeating the authorization slices. The trade-off is that an upgradi
 install's captures re-bucket by repository identity (two same-name repos split; one
 repo opened from two folders converges); the CHANGELOG documents it.
 
-## Path-keyed coordinates (#1033 — staged)
+## Path-keyed coordinates (#1033: staged)
 
 Identity routing already converges worktrees and clones of one repository into
 one project for **captures**. Two gaps remain: the project's **name** is still

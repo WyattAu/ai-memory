@@ -24,14 +24,14 @@ Before these commands were added:
 | **Claude Code / Desktop** | `~/.claude.json`<br>`~/.claude/settings.json`<br>`claude_desktop_config.json` | `~/.claude/skills/`<br>`.claude/skills/` | `~/.claude/plugins/`<br>`Claude Extensions/` | `CLAUDE.md` |
 | **OpenAI Codex CLI** | `~/.codex/config.toml`<br>`~/.codex/mcp.json` | `~/.agents/skills/`<br>`.agents/skills/`<br>`~/.codex/skills/` | `~/.codex/plugins/` | `AGENTS.md` |
 | **Antigravity CLI (`agy`) / Gemini** | `~/.gemini/settings.json`<br>`~/.gemini/config/mcp_config.json`<br>`antigravity-cli/mcp_config.json` | Antigravity: `~/.gemini/config/skills/`, `~/.gemini/antigravity-cli/skills/`, `.agents/skills/`<br>Gemini: `~/.gemini/skills/`, `.gemini/skills/` | `antigravity-cli/plugins/`<br>`~/.gemini/plugins/` | `GEMINI.md`<br>`AGENTS.md`<br>`rules/` |
-| **Qwen Code** | `~/.qwen/settings.json` | `~/.qwen/skills/`<br>`~/.agents/skills/` | — | `QWEN.md`<br>`AGENTS.md` |
-| **Cursor IDE** | `~/.cursor/mcp.json`<br>`.cursor/mcp.json` | — | VS Code / Cursor extensions | `.cursorrules`<br>`.cursor/rules/` |
+| **Qwen Code** | `~/.qwen/settings.json` | `~/.qwen/skills/`<br>`~/.agents/skills/` | - | `QWEN.md`<br>`AGENTS.md` |
+| **Cursor IDE** | `~/.cursor/mcp.json`<br>`.cursor/mcp.json` | - | VS Code / Cursor extensions | `.cursorrules`<br>`.cursor/rules/` |
 | **OpenCode (v1 / v2)** | `opencode.json`<br>`opencode.jsonc`<br>`~/.config/opencode/opencode.json` | `~/.config/opencode/skills/` | `~/.config/opencode/plugins/` | `AGENTS.md` |
-| **Devin CLI** | `~/.devin/config.json` | `~/.devin/skills/` | — | Devin instructions |
-| **Grok Build CLI** | `~/.grok/config.toml` | `~/.grok/skills/` | — | Grok instructions |
-| **Kiro CLI (AWS)** | `~/.kiro/settings/mcp.json` | `~/.kiro/agents/*.json` | — | — |
-| **OpenClaw** | `~/.openclaw/config.json` | — | `~/.openclaw/extensions/` | — |
-| **VS Code Copilot** | `.vscode/mcp.json` | — | Extensions | Copilot instructions |
+| **Devin CLI** | `~/.devin/config.json` | `~/.devin/skills/` | - | Devin instructions |
+| **Grok Build CLI** | `~/.grok/config.toml` | `~/.grok/skills/` | - | Grok instructions |
+| **Kiro CLI (AWS)** | `~/.kiro/settings/mcp.json` | `~/.kiro/agents/*.json` | - |; |
+| **OpenClaw** | `~/.openclaw/config.json` | - | `~/.openclaw/extensions/` | - |
+| **VS Code Copilot** | `.vscode/mcp.json` | - | Extensions | Copilot instructions |
 
 Claude Desktop config paths use the same platform-aware resolver as
 `install-mcp`, including packaged Windows installs. OpenCode uses

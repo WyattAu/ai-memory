@@ -1,4 +1,4 @@
-# Desktop support — phased plan (research output, reconciled with RFC #878)
+# Desktop support: phased plan (research output, reconciled with RFC #878)
 
 > This dated rollout record reconciles RFC #878
 > (github.com/akitaonrails/ai-memory#878) with the findings in this directory
@@ -24,7 +24,7 @@ holds, but two of its premises moved:
    desktop app. Plugins (marketplace; can bundle MCP servers + hooks) are
    the Code tab's extension surface.
 
-## Phase 0 — docs + verify the free wins (ship anytime)
+## Phase 0: docs + verify the free wins (ship anytime)
 
 Status 2026-10-08: docs done, verification mostly done; results in
 [`verification-2026-10.md`](verification-2026-10.md).
@@ -51,7 +51,7 @@ Status 2026-10-08: docs done, verification mostly done; results in
    ai-memory, including the scratch-workspace project naming behavior:
    **done** (`docs/mcp-install.md`, `docs/support-matrix.md`).
 
-## Phase 1 — Antigravity IDE capture parity (smallest new-code step)
+## Phase 1: Antigravity IDE capture parity (smallest new-code step)
 
 The research's best new target, ahead of the RFC's `.mcpb`:
 
@@ -96,7 +96,7 @@ payload. What shipped, under the existing `antigravity-cli` agent kind:
 - Not done: the `.agents/hooks.json` workspace install option, and the IDE
   verification pass.
 
-## Phase 2 — scope & dedup polish for desktop-originated sessions
+## Phase 2: scope & dedup polish for desktop-originated sessions
 
 - Decide scratch-workspace routing: single `desktop/claude-scratch` project
   vs per-scratch projects with a `claude-desktop` tag (see
@@ -107,7 +107,7 @@ payload. What shipped, under the existing `antigravity-cli` agent kind:
   `~/.config/Claude/claude-code-sessions/**/local_*.json` (titles,
   account/org). Strictly optional, since these are closed-app internals.
 
-## Phase 3 — explicit capture for hookless surfaces (RFC Phase 1, adjusted)
+## Phase 3: explicit capture for hookless surfaces (RFC Phase 1, adjusted)
 
 - Tool-surface change (current 24-tool count, MEMORY_INSTRUCTIONS/SNIPPET_BODY,
   prompt-surface regression tests, adversarial boundary test) for an
@@ -116,7 +116,7 @@ payload. What shipped, under the existing `antigravity-cli` agent kind:
   `personal/desktop-chat` (optionally per-app) since no cwd exists.
 - Grok Bot MCP entry format: only worth reverse-engineering on demand.
 
-## Phase 4 — the non-dev tray installer (RFC Phase 2, refined)
+## Phase 4: the non-dev tray installer (RFC Phase 2, refined)
 
 - Tauri v2 vs egui decision, packaging matrix, and the coexistence rules in
   `installer-and-coexistence.md` (detect-before-spawn server governance,
@@ -155,7 +155,7 @@ payload. What shipped, under the existing `antigravity-cli` agent kind:
 6. Does the Claude Desktop Chat tab ever gain a local store/export? (No
    current path; re-check quarterly.)
 7. Antigravity's SessionStart mapping fired on every user turn
-   (`invocationNum` restarts per turn): resolved — gated per conversation by
+   (`invocationNum` restarts per turn): resolved; gated per conversation by
    a `briefed/agy-start-<conversationId>` marker in the native, shell and
    PowerShell hooks. Current builds fire a native `SessionStart`, which is now
    wired; the same marker keeps the `PreInvocation` fallback from delivering

@@ -86,13 +86,13 @@ requires the server to have an LLM provider configured: with no provider the
 call returns the normal hits plus a short `answer_unavailable` note and never
 errors, and the default path (`answer` omitted/`false`) makes no LLM call at
 all. The answer is grounded strictly in the retrieved snippets, so treat it as a
-convenience over the same hits, not a new source — still open the cited pages
+convenience over the same hits, not a new source; still open the cited pages
 before acting. It applies to the normal single-project / `scopes` search;
 `global` and `as_of` queries ignore it. This is a new 2.4 feature and its answer
 quality is not yet eval-validated.
 
-Pair `answer: true` with a `reasoning` tier — `minimal` (default), `low`,
-`medium`, `high`, or `max` — to tune how hard the model works on the synthesis.
+Pair `answer: true` with a `reasoning` tier; `minimal` (default), `low`,
+`medium`, `high`, or `max`; to tune how hard the model works on the synthesis.
 Higher tiers hand the model a larger token budget so it can reason longer before
 its answer is truncated; `minimal` (and omitting `reasoning`) is byte-identical
 to today. `memory_explore` takes the same `reasoning` tier for its prose digest.

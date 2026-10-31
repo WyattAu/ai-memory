@@ -14,7 +14,7 @@ cd docker/multiuser-test && docker compose up -d && ./drive.sh
 | 8081 | alice | `X-Memory-Actor-User: alice` |
 | 8082 | bob | `X-Memory-Actor-User: bob` |
 | 8083 | carol | `X-Memory-Actor-Issuer` + `X-Memory-Actor-Sub`, with no `preferred_username` |
-| 49374 | — | the server unproxied, for the seed step and the negative cases |
+| 49374 | - | the server unproxied, for the seed step and the negative cases |
 
 Slot namespaces are `IdentityKey::path_segment()` values, never raw names:
 alice's slots live under `_slots/u-alice/`, bob's under `_slots/u-bob/`, and

@@ -235,13 +235,13 @@ for `tier`. `serde_json::from_value` rejects anything else.
 `build_batch_request` now spells out:
 
 ```
-Set `tier` to EXACTLY ONE of these four strings — never an integer, never a synonym:
-- "working"      (the live in-progress slice of the session — rarely used here)
+Set `tier` to EXACTLY ONE of these four strings; never an integer, never a synonym:
+- "working"      (the live in-progress slice of the session; rarely used here)
 - "episodic"     (per-session narrative; the sessions/<id>.md page)
 - "semantic"     (durable knowledge: concepts/, decisions/, gotchas/, rules)
 - "procedural"   (repeated patterns extracted from many episodic pages)
 
-Set `kind` to EXACTLY ONE of these four strings — never an integer, never "session" / "concept" / "note":
+Set `kind` to EXACTLY ONE of these four strings; never an integer, never "session" / "concept" / "note":
 - "decision" / "gotcha" / "rule" / "fact"
 
 ## Output format (read this carefully)
@@ -377,7 +377,7 @@ swapping models, the fix tightened the **system prompt** to
 demand faithfulness explicitly:
 
 ```text
-## FAITHFULNESS — the most important rule
+## FAITHFULNESS: the most important rule
 
 The wiki records *what happened in this project*, not what you
 know about the topic in general. … Every claim in every page

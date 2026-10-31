@@ -26,7 +26,7 @@ rely on **at parity or better**, and (b) adds something they can't get where the
 are. So each verdict rests on two ledgers: **our verified moat** (the
 "extra") and **our real gaps** (where "better" is not yet true).
 
-## ai-memory's verified moat (the "extra") — real in code
+## ai-memory's verified moat (the "extra"): real in code
 
 None of the competitors below has more than one or two of these; none has all.
 
@@ -47,7 +47,7 @@ None of the competitors below has more than one or two of these; none has all.
   #16), self-hosted, with no paid tier.
 - **Reproducible retrieval benchmarks**: LongMemEval-S hit@5 0.815 local and
   0.666 zero-LLM through the shipped 2.6 pipeline, 0.951 zero-LLM and 0.945 local with the 3.0
-  observation stream (3.2.1: 0.951 and 0.949, the 3.2.0 local drop recovered — it was boundary-question noise, see the 3.2.1 report), and a published pipeline-vs-component decomposition
+  observation stream (3.2.1: 0.951 and 0.949, the 3.2.0 local drop recovered; it was boundary-question noise, see the 3.2.1 report), and a published pipeline-vs-component decomposition
   ([`benchmarks/`](benchmarks/README.md)). Others publish numbers too (Mem0,
   Zep, Hindsight, EverOS, MemPalace, agentmemory), mostly end-to-end QA with
   their own reader and judge models. The edge is reproducibility; we claim no
@@ -82,7 +82,7 @@ coding-agent competitors as well as in their original camps.
 | **memU** (LLM-wiki + skill distillation, issue #810) | **Partly**: same file-first instinct, different default | Zero-LLM capture/retrieval by default (memU's distill flow is LLM-required), one binary (vs Python + sidecars patching host instruction files), MCP + hooks, git-versioned truth | memU's turnkey **skill-distillation-into-Markdown** packaging, `memu-agent detect` for unknown agents, and its hosted cloud (memu.so). Our nearest equivalent is the opt-in experience/auto-improve pass, not a one-command skill distiller |
 | **Caura** (governed fleet memory, issue #810) | **No: different buyer** (org-scale multi-agent governance and live peer orchestration) | If you (mis)used it for one project: file-first git truth, zero-LLM, single-binary self-host, per-project scoping, no LLM egress | Its **fleet-governance layer** (org/team/agent visibility scopes and four trust tiers) plus the beta bus's peer discovery, presence, leases, correlated replies, and runtime wake helpers; ai-memory intentionally does not run a live agent fleet |
 | **TencentDB Agent Memory** (proxy fan-in server, issue #810) | **Mostly no: different capture model** | Hook/MCP capture into a file-first wiki you own (vs a base-URL proxy intercepting traffic), zero-LLM default (its v2 hub needs an LLM), one binary vs a Node three-service stack, typed handoffs | Its zero-code proxy integration, the v2 hub's per-asset access control, and its **CodeGraph** codebase index (adjacent code-intelligence we don't do). Note: needs no Tencent DB (SQLite default); the name misleads |
-| **Mem0/Zep app SDKs; Supermemory/OpenViking hosted products; LiquidLM, Honcho, Caura** | different buyer (app/user personalization, hosted context DB / RAG-as-a-service, user-modeling, org-scale fleet governance), **not migration targets** for those products; their coding plugins are covered above | — | — |
+| **Mem0/Zep app SDKs; Supermemory/OpenViking hosted products; LiquidLM, Honcho, Caura** | different buyer (app/user personalization, hosted context DB / RAG-as-a-service, user-modeling, org-scale fleet governance), **not migration targets** for those products; their coding plugins are covered above | - |; |
 
 Net: for a **self-hosted, multi-harness, team, zero-LLM, data-ownership**
 coding-memory use case, ai-memory does the basics and adds things none of them
@@ -96,7 +96,7 @@ runtimes (Letta), or a solo dev happy with Claude's built-in or with a
 single-harness plugin. Those are different buyers, and we should say so
 rather than overclaim.
 
-## Did we copy without improving? — the borrowed-ideas audit
+## Did we copy without improving?: the borrowed-ideas audit
 
 The main finding: ai-memory did **not** cargo-cult this field. Of the ideas it
 took, most are at parity-or-better; the exceptions are **scoped-but-unfinished

@@ -12,7 +12,7 @@ relations:
 ---
 ```
 
-## When to bother — and when not to
+## When to bother: and when not to
 
 Plain `[[wikilinks]]` remain the default and are enough for "these
 pages are related". Typed edges are worth adding in one specific loop:

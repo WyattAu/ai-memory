@@ -18,7 +18,7 @@ Use this skill for compilation, learning review, wiki linting, and cleanup of ai
 
 ## Flagged pages
 
-Pages the user or an agent flagged through feedback show up in the audit as `feedback_flagged` findings, with the reason that was given. They are the highest-signal cleanup targets: someone read the page and said it was outdated or incorrect. Fix the page content rather than deleting it, unless the user asks for removal — rewriting it also clears the flag.
+Pages the user or an agent flagged through feedback show up in the audit as `feedback_flagged` findings, with the reason that was given. They are the highest-signal cleanup targets: someone read the page and said it was outdated or incorrect. Fix the page content rather than deleting it, unless the user asks for removal; rewriting it also clears the flag.
 
 ## Consolidation and learning review
 

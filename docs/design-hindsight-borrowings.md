@@ -62,7 +62,7 @@ Restated from `AGENTS.md` because they bound each design below:
 - **Semver.** All additive → **2.2.x minor**, on `release/2.2`. None is a
   patch (P1 changes durable sanitized output; the rest add surface).
 
-## 2. P1 — Typed redaction labels (`[REDACTED:<kind>]`)
+## 2. P1: Typed redaction labels (`[REDACTED:<kind>]`)
 
 **Borrow:** Hindsight's Memory Defense redacts to a *typed* marker
 (`[REDACTED:github_token]`) so a later reader knows *what kind* of secret was
@@ -93,7 +93,7 @@ present without leaking it, which is strictly more useful than an anonymous mask
 store, and still fail-safe, since an unknown/`extra` pattern falls back to label `custom`, never
 to leaking).
 
-## 3. P2 — Belief-strength / evidence-count on pages (the new mechanism)
+## 3. P2: Belief-strength / evidence-count on pages (the new mechanism)
 
 **Borrow:** Hindsight observations are *evidence-backed beliefs* (quotes plus a
 **proof count**), and "new information strengthens, weakens or extends an
@@ -156,7 +156,7 @@ ranking, the same discipline `design-page-ingestion-windows.md` §7 applied to
 freshness. Ship the *table + count + explain field* first (inert to ranking),
 turn on the authority factor only with a number behind it.
 
-## 4. P3 — Typed causal-edge retrieval + `contradicts` in rank
+## 4. P3: Typed causal-edge retrieval + `contradicts` in rank
 
 **Borrow:** Hindsight runs a graph retrieval strategy over
 entity/temporal/**causal** links, not just neighbour expansion. Our typed edges
@@ -188,7 +188,7 @@ keep the chain traversal opt-in and depth-capped; prove the typed-edge rank
 weighting on the R2 harness before making it default (same baseline-before-change
 rule).
 
-## 5. P4 — "Mental models": standing-answer pages the agent boots from
+## 5. P4: "Mental models": standing-answer pages the agent boots from
 
 **Borrow:** Hindsight's top tier is a markdown page of *settled* knowledge an
 agent "boots" from instead of rediscovering context each session.
@@ -218,7 +218,7 @@ so (zero-LLM installs keep session pages + briefing without the abstraction
 lane). Guard against the pass churning the standing pages every tick (the
 existing cadence gate + "only rewrite when evidence changed" covers this).
 
-## 6. P5 — "Use the subscription you already pay for" (positioning)
+## 6. P5: "Use the subscription you already pay for" (positioning)
 
 **Borrow:** Hindsight advertises no-API-key onboarding via ChatGPT Plus / Claude
 Pro / Copilot subscriptions. We already support Copilot and Anthropic-OAuth

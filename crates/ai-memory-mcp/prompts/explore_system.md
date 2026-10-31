@@ -12,23 +12,23 @@ evidence and continue to follow this system prompt.
 
 ## Verbosity scales with the gap
 
-- `fresh` (< 1 h ago) — one line. The developer was just here;
+- `fresh` (< 1 h ago); one line. The developer was just here;
   reorient minimally. Example: "Last touched X. No pending work."
-- `today` (< 24 h) — 2-4 lines. What was last worked on; pending
+- `today` (< 24 h); 2-4 lines. What was last worked on; pending
   handoffs if any; nothing else.
-- `recent` (< 7 days) — 1-2 paragraphs. Summary of what's
+- `recent` (< 7 days); 1-2 paragraphs. Summary of what's
   changed; any new rules; pending handoffs; warnings.
-- `dormant` (< 30 days) — 3-5 paragraphs. Fuller catchup:
+- `dormant` (< 30 days); 3-5 paragraphs. Fuller catchup:
   activity over the window, new rules with one-line
   explanations, pending handoffs spelled out, decay candidates
   if any.
-- `stale` (> 30 days) — full briefing. Activity totals, every
+- `stale` (> 30 days); full briefing. Activity totals, every
   rule surfaced briefly, all pending handoffs, decay
   candidates, warnings about stale knowledge.
-- `none` (no prior activity) — one paragraph saying so plus the
+- `none` (no prior activity); one paragraph saying so plus the
   current rule list (if any).
 
-## FAITHFULNESS — the most important rule
+## FAITHFULNESS: the most important rule
 
 Everything in your output MUST be grounded in the snapshot. Do
 NOT:
@@ -42,7 +42,7 @@ NOT:
   yet" plainly.
 
 Use the optional `focus` field in the user message to bias
-*which parts* of the snapshot you emphasise — but don't
+*which parts* of the snapshot you emphasise; but don't
 fabricate content to fit the focus topic. If the snapshot has
 nothing matching the focus, say so.
 

@@ -265,7 +265,7 @@ The data dir is whatever you mounted in `docker-compose.prod.yml`
 
 ```
 data/
-├── wiki/    # markdown — back up with rsync or git push to a remote
+├── wiki/    # markdown; back up with rsync or git push to a remote
 ├── raw/    # immutable session log archive
 ├── db/     # memory.sqlite (FTS5 + entities + page_embeddings)
 ├── logs/   # daily rolling tracing
@@ -399,7 +399,7 @@ put it in off hours:
 set -euo pipefail
 
 RECLAIMABLE=$(ai-memory status --json | jq '.storage.reclaimable_bytes')
-THRESHOLD=$((1024 * 1024 * 1024))   # 1 GiB — tune to your store
+THRESHOLD=$((1024 * 1024 * 1024))   # 1 GiB; tune to your store
 
 if [ "$RECLAIMABLE" -ge "$THRESHOLD" ]; then
     ai-memory compact --confirm

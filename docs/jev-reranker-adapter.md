@@ -122,7 +122,7 @@ hybrid, `explain=true` score details, identical server build):
 
 | Reranker | hit@1 | MRR | NDCG@10 | mean rerank latency |
 |---|---|---|---|---|
-| none (server order) | 0.495 | 0.651 | 0.739 | — |
+| none (server order) | 0.495 | 0.651 | 0.739 | - |
 | hosted model A (reasoning, max) | 0.778 | 0.840 | 0.875 | **20.2 s** |
 | hosted model B (reasoning) | 0.768 | 0.834 | 0.870 | 13.9 s |
 | **Jev via this adapter** | **0.778** | **0.838** | **0.873** | **0.205 s** |

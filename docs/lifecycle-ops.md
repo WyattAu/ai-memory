@@ -816,7 +816,7 @@ The dry run therefore names each scope it would drain, with counts:
     default/scratchpad: 3 observation(s)
     default/tmp: 1 observation(s)
   Note: this empties every scope listed above, not only the one named as the
-  source. Moving the session back later returns all rows to a single project —
+  source. Moving the session back later returns all rows to a single project -
   the split shown here is not restored.
 ```
 
@@ -826,7 +826,7 @@ before confirming.
 ### `reclaim-ledger-versions`
 
 ```bash
-# Dry run — reports how many superseded ledger versions (and bytes) would go:
+# Dry run: reports how many superseded ledger versions (and bytes) would go:
 ai-memory reclaim-ledger-versions
 # Apply, and rewrite the database to actually free the disk:
 ai-memory reclaim-ledger-versions --confirm --compact
@@ -854,7 +854,7 @@ all.
 ```bash
 # Preview: which ledgers and how many bytes the sweep would delete.
 ai-memory forget-sweep --dry-run
-# Enable it (config.toml) — the sweep then deletes them on its schedule too:
+# Enable it (config.toml): the sweep then deletes them on its schedule too:
 #   [decay]
 #   ledger_retention_months = 12
 ```
@@ -894,7 +894,7 @@ removal would be deleted with the file; that can only affect a month closed for
 at least `N` months, which receives nothing except a very late event (and that
 event recreates a small file). The database is never written: ledgers have no
 `pages` rows since #660, and when a legacy row exists for a deleted ledger the
-report counts it in `ledger_page_rows_left` and leaves it alone — run
+report counts it in `ledger_page_rows_left` and leaves it alone; run
 `reclaim-ledger-versions` for those.
 
 The sweep deletes the file from disk. The wiki's git repository keeps the

@@ -94,7 +94,7 @@ tab's extension surface.
   store for the Chat tab. Code-tab transcripts are the standard
   `~/.claude/projects/<munged-cwd>/<session-uuid>.jsonl` files.
 
-## Session bridging (CLI ↔ Desktop) — verified mechanism
+## Session bridging (CLI ↔ Desktop): verified mechanism
 
 The user report "desktop catches CLI sessions and chat continues on both" is
 real and observable on this machine. Mechanism, from local artifacts:

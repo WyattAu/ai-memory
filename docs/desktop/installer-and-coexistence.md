@@ -12,7 +12,7 @@
 
 ## 1. Tray-app implementation options
 
-### Option A — Tauri v2 (recommended baseline)
+### Option A: Tauri v2 (recommended baseline)
 
 - **Tray**: first-class `tray-icon` feature (`TrayIconBuilder`, menus,
   events). Linux note: tray mouse-move/enter events unsupported, but icon +
@@ -30,7 +30,7 @@
 - Cost: webview-based UI (small), Rust core is fine; maturities match our
   Rust-first stack.
 
-### Option B — pure Rust GUI: egui + `tray-icon`
+### Option B: pure Rust GUI: egui + `tray-icon`
 
 - `tray-icon` (tauri-apps org, <https://docs.rs/tray-icon>) + `muda` menus;
   egui for the settings window. Lightest stack, no webview, one binary.
@@ -39,7 +39,7 @@
   trivial (menu + one settings pane), which the Swift companion's scope
   suggests it might.
 
-### Option C — keep Swift companion + add a Linux counterpart
+### Option C: keep Swift companion + add a Linux counterpart
 
 - macOS: `companions/ai-memory-macos` already works (ships runtime, governs
   LaunchAgent, data dir survives app replacement, philosophy: "wrapper, not

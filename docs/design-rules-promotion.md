@@ -50,7 +50,7 @@ number of slots, and admitting a rule means evicting another.
 | Cost | A slot in the scarce budget | Zero standing cost |
 | For | Invariants, guardrails, conventions the agent must *never* violate and that apply *broadly* | Context-specific facts, decisions, gotchas, history: "what we did / why X is the way it is" |
 | Test | "Forgetting this causes a mistake on many tasks" | "Relevant only when the task touches it" |
-| Examples | "All SQLite writes go through the single writer actor"; "never write files in place — tmp+rename" | "In July we chose Caddy over nginx because…"; a month-old debugging gotcha |
+| Examples | "All SQLite writes go through the single writer actor"; "never write files in place; tmp+rename" | "In July we chose Caddy over nginx because…"; a month-old debugging gotcha |
 
 **The default is retrieval.** A memory can be `_rules/`-kind and durable and
 still stay retrieval-only unless it clears a higher bar (below). Promotion is
@@ -134,7 +134,7 @@ when the user asks):
   page + confidence) so a reader sees why it's there and can open the memory.
 - **Recommendations are pulled by the user.** Candidates accrue silently; the
   user sees them only when they run `recommend`. The one optional nudge is a
-  single `status` line ("N new rule recommendations — `ai-memory rules
+  single `status` line ("N new rule recommendations; `ai-memory rules
   recommend`") when the candidate set grows, off by a config flag. There is no
   per-turn chatter and no pending-writes queue to watch.
 - **Fully reversible.** Removing the managed block (or never running `approve`)
@@ -199,8 +199,8 @@ things that write the managed block. §6 reflects this.)*
 ---
 
 ### Sources
-- [Best practices for Claude Code — Claude Code Docs](https://code.claude.com/docs/en/best-practices)
-- [CLAUDE.md Best Practices: What the Evidence Supports (2026) — Alex Dunlop](https://www.alexdunlop.com/writing/claude-md-best-practices)
-- [AGENTS.md Best Practices: Template and Guide (2026) — BetterClaw](https://www.betterclaw.io/blog/agents-md-best-practices)
-- [CLAUDE.md Best Practices, 2026 — AgentLint](https://www.agentlint.app/blog/claude-md-best-practices-2026/)
+- [Best practices for Claude Code; Claude Code Docs](https://code.claude.com/docs/en/best-practices)
+- [CLAUDE.md Best Practices: What the Evidence Supports (2026); Alex Dunlop](https://www.alexdunlop.com/writing/claude-md-best-practices)
+- [AGENTS.md Best Practices: Template and Guide (2026); BetterClaw](https://www.betterclaw.io/blog/agents-md-best-practices)
+- [CLAUDE.md Best Practices, 2026; AgentLint](https://www.agentlint.app/blog/claude-md-best-practices-2026/)
 - `docs/research-ecc.md` (ECC's "memory as context, not policy")

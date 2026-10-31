@@ -504,7 +504,7 @@ has no standalone deep-dive; this section is its record.
 core + managed cloud, **$5.35M pre-seed** led by Variant/White Star/Betaworks).
 Honcho is the archetype of a **new camp** this report had no bucket for:
 **user-modeling / theory-of-mind memory**. Its unit of memory is a **"peer"**
-(any entity that "persists but changes over time — users, agents, objects") and
+(any entity that "persists but changes over time; users, agents, objects") and
 its differentiator is treating memory as **"a reasoning problem, not a retrieval
 problem"**: it models *what one peer knows and believes about another* over
 time. The substrate is the opposite of ours on every axis we chose:

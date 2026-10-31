@@ -1,15 +1,15 @@
-# `evals/` — evaluation harnesses
+# `evals/`: evaluation harnesses
 
 One Rust binary (`ai-memory-eval`) with three subcommands:
 
-- **`ab`** — runs the EXACT consolidation prompt ai-memory uses in
+- **`ab`**; runs the EXACT consolidation prompt ai-memory uses in
   production against two LLM providers side by side, saves both
   outputs to disk for human comparison, and scores literal fidelity
   (see [Literal fidelity](#literal-fidelity)).
-- **`projection`** — the zero-LLM half of that scoring: which fixture
+- **`projection`**; the zero-LLM half of that scoring: which fixture
   facts the observation projection lets into the prompt at all. No
   provider, no network.
-- **`retrieval`** — the LongMemEval retrieval benchmark, driven end to
+- **`retrieval`**; the LongMemEval retrieval benchmark, driven end to
   end through a real `ai-memory serve` subprocess. Published baselines
   live in `docs/benchmarks/`.
 
@@ -25,9 +25,9 @@ docker image. CI builds it and runs its unit tests
 After switching providers, models, or major prompt edits. Concretely:
 
 - Replacing OpenRouter/Kimi with local Ollama (the case that
-  motivated this harness — see commit log).
+  motivated this harness; see commit log).
 - Trying a new Ollama model (`qwen3:32b` → `qwen3-coder:30b`).
-- Tuning the `BATCH_SYSTEM_PROMPT` itself — does the rewrite
+- Tuning the `BATCH_SYSTEM_PROMPT` itself; does the rewrite
   preserve quality across providers?
 
 The fixtures are deliberately small synthetic session logs that
@@ -40,12 +40,12 @@ distinction).
 For each `*.json` under `evals/fixtures/`:
 
 1. Builds the request via
-   [`ai_memory_consolidate::build_batch_request`] — same code path
+   [`ai_memory_consolidate::build_batch_request`]; same code path
    the live consolidator uses.
 2. Sends it to a **baseline** and a **candidate** provider, *in
    parallel*.
 3. Runs the result through
-   [`ai_memory_llm::complete_structured`] — same JSON-schema
+   [`ai_memory_llm::complete_structured`]; same JSON-schema
    validation the live system applies. Schema-parse failure is
    recorded (not fatal).
 4. Persists to `evals/runs/<timestamp>/{baseline,candidate}/<fixture>.{json,md,meta.json}`.
@@ -245,7 +245,7 @@ Both lists are optional.
 `post-tool-use`, `pre-compact`, `notification`, `stop`,
 `session-end`, `other` (see `ObservationKind` in `ai-memory-core`).
 
-The `description` field isn't read by the runner — it's a comment
+The `description` field isn't read by the runner; it's a comment
 for the next human who opens the file.
 
 ## What this harness does NOT do
@@ -264,7 +264,7 @@ for the next human who opens the file.
 
 `evals/runs/` is in `.gitignore`. Drop it whenever it gets large.
 
-## `retrieval` — LongMemEval benchmark
+## `retrieval`: LongMemEval benchmark
 
 Measures the real retrieval stack against
 [LongMemEval](https://huggingface.co/datasets/xiaowu0162/longmemeval)
@@ -272,7 +272,7 @@ Measures the real retrieval stack against
 haystacks). Nothing is mocked:
 
 1. a real `ai-memory serve` subprocess starts on a fresh temp data dir
-   (zero-LLM: no consolidation LLM, no embedder, no reranker — fully
+   (zero-LLM: no consolidation LLM, no embedder, no reranker; fully
    deterministic and offline);
 2. each question's haystack replays through `POST /hook/batch` at the
    production hook cadence (`session-start`, `user-prompt-submit` per
@@ -281,7 +281,7 @@ haystacks). Nothing is mocked:
 3. the question runs through MCP `tools/call memory_query` with
    explicit workspace/project scoping;
 4. results are scored session-level: `hit@k` (any evidence session in
-   the top k — the "Recall@k" most systems publish) and `recall@k`
+   the top k; the "Recall@k" most systems publish) and `recall@k`
    (fraction of evidence sessions found). The 30 abstention questions
    are excluded and reported separately.
 
@@ -303,12 +303,12 @@ When publishing a baseline, copy the markdown into `docs/benchmarks/`.
 
 ### The triple: accuracy + latency + context-tokens
 
-Every run — single-config or A/B — reports three things per slice, not
+Every run; single-config or A/B; reports three things per slice, not
 just accuracy:
 
-- **accuracy** — `hit@k` / `recall@k` (unchanged);
-- **latency** — `memory_query` MCP round-trip **p50 / p95** in ms;
-- **context tokens** — the context an agent would ingest from the result,
+- **accuracy**; `hit@k` / `recall@k` (unchanged);
+- **latency**; `memory_query` MCP round-trip **p50 / p95** in ms;
+- **context tokens**; the context an agent would ingest from the result,
   estimated as **chars / 4** over each returned hit's `title` + `snippet`
   (a documented heuristic, not a real tokenizer), reported **mean / median**.
 
@@ -322,7 +322,7 @@ table (markdown + JSON). A/B mode turns on with `--candidate` or any
 Baseline knobs: `--embeddings none|local` (also = vectors off/on),
 `--reranker` (sets `AI_MEMORY_RERANKER=llm`; needs a provider via
 `--server-env`), `--server-env KEY=VALUE` (any server env, repeatable),
-`--query-arg KEY=JSON` (extra `memory_query` args, repeatable — so future
+`--query-arg KEY=JSON` (extra `memory_query` args, repeatable; so future
 knobs like `pin_first` / `include_superseded` can be A/B'd;
 `query`/`workspace`/`project`/`limit` are reserved). Each has a
 `--candidate-*` twin (`--candidate-embeddings`, `--candidate-reranker`,
@@ -330,7 +330,7 @@ knobs like `pin_first` / `include_superseded` can be A/B'd;
 unset mirrors the baseline.
 
 ```bash
-# Determinism check — baseline == candidate ⇒ accuracy/context delta = 0:
+# Determinism check: baseline == candidate ⇒ accuracy/context delta = 0:
 cargo run --release -p ai-memory-eval -- retrieval --candidate --sample 2
 
 # Vectors off vs on, full run:
@@ -342,7 +342,7 @@ cargo run --release -p ai-memory-eval -- retrieval --fetch \
     --candidate-query-arg include_expired=true
 ```
 
-Output: `evals/runs/<timestamp>-retrieval/report.{json,md}` — the JSON is
+Output: `evals/runs/<timestamp>-retrieval/report.{json,md}`; the JSON is
 `{ baseline, candidate, delta }`; the markdown carries both per-slice
 triples and an `overall` delta table. Publish full-dataset A/B numbers in
 `docs/benchmarks/retrieval-ab-r2.md`.
@@ -354,13 +354,13 @@ metric so the `answer`/`reasoning` MCP features can be proven later. It is
 **OFF by default and makes REAL LLM API calls**, gated behind a key. Per
 scored question, with QA on, the harness:
 
-1. gets a candidate answer — the server's own `answer` field when a future
+1. gets a candidate answer; the server's own `answer` field when a future
    `answer=true` feature populates it, otherwise a **synthesis** LLM call
    over the retrieved snippets (the exact context an agent would receive);
 2. **grades** that candidate against the dataset's gold answer with an
    LLM-as-judge (`{correct, reason}`), LongMemEval-style;
-3. reports **QA accuracy** (fraction correct) per slice — plus the
-   answer-step latency (p50/p95) and answer-token estimate — alongside the
+3. reports **QA accuracy** (fraction correct) per slice; plus the
+   answer-step latency (p50/p95) and answer-token estimate; alongside the
    R2a triple, in both the single-config and A/B reports. Provider+model
    names are recorded; **keys never are**.
 
@@ -373,7 +373,7 @@ per field: `--qa-grader-provider`/`-model`/`-base-url`/`-api-key`/
 
 **Gating:** if `--qa` is set but the provider/key cannot be resolved, the run
 prints a SKIP line and continues with QA off (retrieval metrics unaffected),
-exiting success — so a keyless CI stays green. The default non-QA path stays
+exiting success; so a keyless CI stays green. The default non-QA path stays
 zero-LLM and deterministic.
 
 ```bash

@@ -16,7 +16,7 @@ with a warning. Opt out with `embedding_provider = "none"`; an
 explicitly configured provider is never overridden.
 
 ```toml
-# config.toml — all optional as of 2.0
+# config.toml: all optional as of 2.0
 embedding_provider = "local"     # explicit: hard-fails if unavailable
 # embedding_provider = "none"    # opt out of vectors entirely
 ```

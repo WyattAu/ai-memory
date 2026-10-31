@@ -92,7 +92,7 @@ add a new importer.
 
 ## Design
 
-### 1. Trigger — the SessionStart boot handshake
+### 1. Trigger: the SessionStart boot handshake
 
 The SessionStart hook already fires and already contacts the server (it fetches the
 hot-context/handoff block). Extend that one round-trip to also learn, cheaply:
@@ -109,7 +109,7 @@ If empty AND enabled, the hook **spawns a detached `ai-memory backfill` process*
 returns immediately. The hook never blocks boot and never does the import inline
 (invariant #5). If not empty, or disabled, the hook does nothing new.
 
-### 2. Worker — `ai-memory backfill` (new thin CLI subcommand)
+### 2. Worker: `ai-memory backfill` (new thin CLI subcommand)
 
 A detached, read-only-on-the-local-side worker. For the resolved `(workspace, project)`
 and cwd:
@@ -131,7 +131,7 @@ Manual control: `ai-memory backfill` can be run by hand (idempotent), with
 `--all-sessions` / `--session <id>` / `--dry-run` / `--force` (re-import a non-empty
 store, explicit) for operators who want it outside the boot path.
 
-### 3. Ingest path — two options
+### 3. Ingest path: two options
 
 The events from `export_transcript` are `NewWorkstreamEvent`s. Two ways to land them:
 
@@ -272,7 +272,7 @@ bootstrap.
 - **Multi-session**: two concurrent boots → exactly one import (lease claim-once), the
   other no-ops. This is the invariant-#16 concurrency shape, proven at integration level.
 
-## Open questions — resolved as built
+## Open questions: resolved as built
 
 These were the pre-implementation questions; the shipped feature (see the **As-built
 note** at the top) resolved each:

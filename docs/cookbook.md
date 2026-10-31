@@ -36,7 +36,7 @@ You mostly just talk to your agent; it calls the right tool. Common ones:
 | Remember until a date | "Remember this until the migration ships" | `memory_write_page` + `expires_at` |
 | A standing rule for *every* project | "Always: never force-push" | `memory_write_page` with `scope: "global"` |
 | Read a specific saved page in full | "Read the `_rules/deploy` page" | `memory_read_page` |
-| Save context for the next session | "Wrap up — save context for next time" | `memory_handoff_begin` |
+| Save context for the next session | "Wrap up; save context for next time" | `memory_handoff_begin` |
 | See project stats | "How much memory do we have?" | `memory_status` / `memory_briefing` |
 
 You rarely write pages by hand: lifecycle hooks capture prompts and tool calls

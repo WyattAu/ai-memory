@@ -35,7 +35,7 @@ up, what else to include, what to exclude, and how to schedule it.
 data/
 ├── wiki/    # markdown source of truth (already a git repository)
 ├── raw/    # immutable session-log ledger
-├── db/     # memory.sqlite (FTS5, entities, embeddings) — DERIVED
+├── db/     # memory.sqlite (FTS5, entities, embeddings); DERIVED
 ├── logs/   # daily rolling tracing
 └── models/ # local embedder weights (redownloadable)
 ```
@@ -85,7 +85,7 @@ secret-file rules already covered above. The mirror repository's
 `.gitignore` should carry at least:
 
 ```
-# Provider credentials and OAuth material — never push
+# Provider credentials and OAuth material: never push
 config/*.env
 config/*.key
 config/*.pem
