@@ -1,54 +1,41 @@
-# cargo-deny configuration.
-# Goal: reject GPL/AGPL transitive deps (license trap that cost cognee #2807)
-# and pin to the official crates.io registry.
+# WyattAu dependency governance — cargo-deny configuration.
+# Copy to the repo root. Policies: see engineering-standards README §7.
 
 [graph]
-# CI runs cargo-deny with --all-features (see .github/workflows/ci.yml), so build
-# the same graph here. This keeps the documented local gate `cargo deny check`
-# (AGENTS.md, CONTRIBUTING.md) checking the exact feature set CI enforces, instead
-# of the narrower default-features graph.
 all-features = true
-no-default-features = false
-
-[output]
-feature-depth = 1
 
 [advisories]
 version = 2
-ignore = [
-    # RUSTSEC-2024-0436: `paste` is unmaintained. Compile-time
-    # proc-macro helper pulled by the candle ML stack (local
-    # embeddings); no runtime code ships from it. Revisit when candle
-    # replaces it upstream.
-    "RUSTSEC-2024-0436",
-]
+yanked = "deny"
 
 [licenses]
 version = 2
 allow = [
-    "MIT",
-    "Apache-2.0",
-    "Apache-2.0 WITH LLVM-exception",
-    "BSD-2-Clause",
-    "BSD-3-Clause",
-    "ISC",
-    "Unicode-3.0",
-    "Zlib",
-    "MPL-2.0",
-    "CC0-1.0",
-    "CDLA-Permissive-2.0",
+  "MIT",
+  "Apache-2.0",
+  "Apache-2.0 WITH LLVM-exception",
+  "BSD-2-Clause",
+  "BSD-3-Clause",
+  "ISC",
+  "Unicode-3.0",
+  "Zlib",
+  "CDLA-Permissive-2.0",
+  # BSL-1.0 — permissive Boost license; ships via redis >=1.0's bundled xxhash
+  # (precedent: webhookkit).
+  "BSL-1.0",
+  # MPL-2.0 — weak file-level copyleft, linkable; cssparser/html5ever via
+  # ammonia (precedent: docs-pipeline).
+  "MPL-2.0",
+  # CC0-1.0 — public-domain dedication; notify dependency chain
+  # (precedent: config-kit).
+  "CC0-1.0",
+  # 0BSD — public-domain-equative, no attribution requirement beyond the
+  # notice; quoted_printable via lettre (precedent: mailkit).
+  "0BSD",
 ]
-confidence-threshold = 0.9
-exceptions = []
+confidence-threshold = 0.93
 
 [bans]
-multiple-versions = "allow"
+multiple-versions = "warn"
 wildcards = "deny"
-deny = []
-
-[sources]
-unknown-registry = "deny"
-unknown-git = "deny"
-allow-registry = ["https://github.com/rust-lang/crates.io-index"]
-required-git-spec = "rev"
-allow-git = ["https://github.com/zip-rs/zip2"]
+highlight = "all"
